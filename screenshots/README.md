@@ -27,3 +27,25 @@
 | [`troubleshooting/t01-kinesis-kvstore-failure.png`](troubleshooting/t01-kinesis-kvstore-failure.png) | Kinesis checkpoint failure tied to KV Store initialization rather than the detection rule |
 | [`troubleshooting/t02-compatible-kernel-recovery.png`](troubleshooting/t02-compatible-kernel-recovery.png) | Reversible kernel fallback / service recovery evidence |
 | [`troubleshooting/t03-webhook-schema-failure.png`](troubleshooting/t03-webhook-schema-failure.png) | HTTP 400 schema failure that led to the final alert evidence contract |
+
+
+## Official blind-exercise screenshots — add only after execution
+
+Recommended evidence order:
+
+```text
+20-alert-trigger.png
+21-soc-dashboard-window.png
+22-route53-raw-evidence.png
+23-source-history.png
+24-ai-triage-human-validation.png
+25-soc-disposition.png
+26-ir-handoff.png
+27-ir-response-verification.png       # only if a response is approved
+28-attacker-ground-truth-reveal.png   # publish only after defender record is locked
+29-final-comparison.png
+```
+
+The attacker-side ground-truth screenshot must **not** be shared with the SOC Analyst during the live investigation.
+
+Keep the final set small: one screenshot should prove one important fact or decision.

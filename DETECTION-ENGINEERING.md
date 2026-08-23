@@ -11,7 +11,7 @@ This document records the Detection Engineering work that turned raw Route 53 au
 It keeps the engineering decisions, useful evidence, important failures and lessons that another Detection Engineer should be able to reproduce.
 
 > [!NOTE]
-> This was Sonia's life first end-to-end Detection Engineering assignment. The work started without a prebuilt rule or pre-labelled attacker field. The detection was developed from observed telemetry, baseline behavior and controlled validation.
+> This was Sonia's first end-to-end Detection Engineering assignment. The work started without a prebuilt rule or pre-labelled attacker field. The detection was developed from observed telemetry, baseline behavior and controlled validation.
 
 ---
 
@@ -726,7 +726,7 @@ The result is stronger because the problems were not hidden. Only the reusable o
 This phase does **not** close the full Scenario 01 exercise. The following remain for the synchronized team exercise:
 
 ```text
-official simulation ground truth
+official adversary ground truth
 → SOC Analyst investigation and final disposition
 → official AI-vs-human comparison
 → IR / Defender decision

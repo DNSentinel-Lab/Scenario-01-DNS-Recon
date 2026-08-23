@@ -8,9 +8,9 @@
 ![MITRE](https://img.shields.io/badge/MITRE-T1590.002-E34F26?style=for-the-badge)
 ![AI](https://img.shields.io/badge/AI_Triage-Validated-7B2CBF?style=for-the-badge)
 
-**A controlled SOC-lab Detection Engineering project that turns real Route 53 authoritative DNS telemetry into an analyst-ready Splunk detection, scheduled alert, investigation dashboard and AI-assisted triage path.**
+**A realistic DNS security exercise that combines completed Detection Engineering with a blind external adversary-vs-defender workflow. The official adversary uses real public DNS traffic from outside the defender AWS account; the SOC Analyst investigates only defender-visible evidence.**
 
-[Detection Engineering Story](DETECTION-ENGINEERING.md) · [Runbook](SCENARIO-RUNBOOK.md) · [SPL](spl/README.md) · [Dashboard](dashboard/README.md) · [Evidence](evidence/README.md) · [AI Mapping](ai/README.md)
+[Detection Engineering Story](DETECTION-ENGINEERING.md) · [Runbook](SCENARIO-RUNBOOK.md) · [Attacker](attacker/README.md) · [SOC Analyst](soc/README.md) · [Blind Exercise](exercise/README.md) · [SPL](spl/README.md) · [Dashboard](dashboard/README.md) · [Evidence](evidence/README.md) · [AI Mapping](ai/README.md)
 
 </div>
 
@@ -39,7 +39,38 @@ trusted DNS telemetry
 **Primary MITRE ATT&CK:** `T1590.002 — Gather Victim Network Information: DNS`
 
 > [!IMPORTANT]
-> **Detection Engineering for Scenario 01 is complete. The full Scenario 01 SOC/IR exercise is not yet complete.** Official simulation ground truth, SOC Analyst final disposition, Incident Response, containment and post-response verification remain separate later phases.
+> **Detection Engineering for Scenario 01 is complete. The full Scenario 01 SOC/IR exercise is not yet complete.** Official adversary ground truth, SOC Analyst final disposition, Incident Response, containment and post-response verification remain separate later phases.
+
+## 🕶️ Official exercise model — blind external adversary
+
+The official run is intentionally separated from the Detection Engineering test traffic.
+
+```text
+Separate AWS account / optional external Windows
+                |
+                | public DNS / HTTPS only
+                v
+Route 53 authoritative DNS + public Web target
+                |
+                v
+             Splunk
+          /           \
+   Detection v1.0     AI assistance
+          \           /
+           SOC Analyst
+                |
+        TP / benign TP / FP / inconclusive
+                |
+             IR handoff
+```
+
+The Project Lead acts as the **Adversary Operator**. The SOC Analyst is not told the attack start time, source IP, commands or queried names. Actual attacker ground truth is revealed only after the analyst has locked the investigation result.
+
+Operational documents:
+
+- [`attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md`](attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md)
+- [`soc/SOC-ANALYST-PLAYBOOK.md`](soc/SOC-ANALYST-PLAYBOOK.md)
+- [`exercise/BLIND-EXERCISE-PROTOCOL.md`](exercise/BLIND-EXERCISE-PROTOCOL.md)
 
 ## 👩‍💻 Detection Engineer — Sonia
 
@@ -224,6 +255,18 @@ The full technical story and lessons learned are in [`DETECTION-ENGINEERING.md`]
 ├── ai/
 │   ├── README.md
 │   └── scenario-01-ai-mapping.md
+├── attacker/
+│   ├── README.md
+│   ├── SCENARIO-01-ADVERSARY-PLAYBOOK.md
+│   └── ground-truth-template.md
+├── soc/
+│   ├── README.md
+│   ├── SOC-ANALYST-PLAYBOOK.md
+│   └── investigation-template.md
+├── exercise/
+│   ├── README.md
+│   ├── BLIND-EXERCISE-PROTOCOL.md
+│   └── final-comparison-template.md
 ├── evidence/
 │   ├── README.md
 │   └── detection-engineering-validation.md
@@ -239,8 +282,8 @@ The full technical story and lessons learned are in [`DETECTION-ENGINEERING.md`]
 
 | Role | Member | Current Scenario 01 status |
 |---|---|---|
-| Project Lead / Controlled Simulation | [Abdul-Rehman](https://github.com/abdul4rehman215) | Detection Engineering test traffic supported; official exercise pending |
-| SOC Analyst | [Musfira](https://github.com/MUSFIRA-ZAFAR) | Official Scenario 01 investigation pending |
+| **Project Lead / Adversary Operator** | [Abdul-Rehman](https://github.com/abdul4rehman215) | External attacker environment ready; official blind exercise pending |
+| **SOC Analyst / Threat Hunter** | [Musfira](https://github.com/MUSFIRA-ZAFAR) | Blind investigation playbook ready; official disposition pending |
 | **Detection Engineer** | **[Sonia](https://github.com/sonia11mansha415)** | **✅ Detection Engineering complete** |
 | IR / Defender | [Lubaba](https://github.com/lubaba1513-pixel) | Official response/verification pending |
 
@@ -251,9 +294,11 @@ Detection Engineering readiness does **not** mean the whole Scenario 01 exercise
 Still pending for the official exercise:
 
 ```text
-official ground truth
-→ SOC Analyst investigation
+blind external attacker execution
+→ SOC Analyst investigation without ground truth
 → AI vs human comparison in the exercise context
+→ SOC decision locked
+→ attacker ground-truth reveal
 → IR decision
 → containment if approved
 → post-response verification
@@ -269,4 +314,4 @@ That boundary keeps the repository truthful and follows the shared project docum
 - [Scenario infrastructure roadmap](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure/blob/main/00-project-design/scenario-infrastructure-roadmap.md)
 
 > [!NOTE]
-> This repository documents controlled security engineering on infrastructure and domains owned by, or explicitly authorized for, the project team.
+> This repository documents security engineering and blind adversary-emulation activity against infrastructure and domains owned by, or explicitly authorized for, the project team. The official attacker operates externally to the defender account, but the scope remains limited to project-owned public services.
