@@ -76,7 +76,7 @@ result.source        → source
 result.evidence_json → evidence object
 ```
 
-This mapping fixed the earlier HTTP 400 schema validation failure without changing the working Docker/Kinesis network path.
+This mapping fixed the earlier HTTP 400 schema validation failure.
 
 ## End-to-end validation
 
@@ -148,10 +148,6 @@ index=dns_soc_ai
 | table _time alert_id alert_name scenario severity summary confidence observed_indicators suspicion_reasons mitre_tactic mitre_technique_id mitre_technique_name kill_chain_stage missing_evidence response_considerations human_validation_required processed_at request_id
 ```
 
-`mvuniq()` is intentionally not used because it was unsupported in the deployed Splunk environment during validation.
-
 ## Human validation boundary
 
 The official Scenario 01 exercise still requires the SOC Analyst to compare AI assistance with the original Route 53 evidence and record where the model was correct, incomplete or wrong.
-
-AI integration being technically successful does **not** mean the full scenario investigation is complete.
