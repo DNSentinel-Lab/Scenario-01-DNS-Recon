@@ -4,7 +4,7 @@
 **Engineer:** [Sonia](https://github.com/sonia11mansha415)  
 **Format:** Splunk Dashboard Studio JSON
 
-The final dashboard is an investigation surface built from the real Route 53 authoritative fields used by Scenario 01.
+The dashboard is an investigation surface built from the real Route 53 authoritative fields used by Scenario 01.
 
 ## Implementation artifact
 
@@ -12,7 +12,7 @@ The final dashboard is an investigation surface built from the real Route 53 aut
 
 ![Scenario 01 DNS Reconnaissance Investigation](../screenshots/detection-engineering/04-dns-investigation-dashboard.png)
 
-*The final Dashboard Studio view gives the analyst source-aware DNS KPIs, time behavior, pattern distributions and raw-event investigation pivots in one page.*
+*The Dashboard Studio view gives the analyst source-aware DNS KPIs, time behavior, pattern distributions and raw-event investigation pivots in one page.*
 
 ## Data source
 
@@ -109,11 +109,10 @@ This provides a quick bridge from the dashboard into the hunting and detection l
 
 ## Engineering decisions
 
-- The dashboard uses real project telemetry rather than synthetic `classification` labels.
-- `observed_dns_source` remains neutral and is not presented as guaranteed attacker attribution.
+- The dashboard uses real project telemetry.
+- `observed_dns_source` remains neutral.
 - NXDOMAIN is displayed as useful response context, not treated as a mandatory reconnaissance feature.
-- No extra decorative panels were added after the investigation questions were covered.
-- The final implementation is JSON because this dashboard was built in Dashboard Studio, not Classic Dashboard XML.
+- The final implementation is JSON because this dashboard was built in Dashboard Studio.
 
 ## Relationship to the detection
 
@@ -126,4 +125,4 @@ Detection → evidence-based threshold decision
 Alert     → analyst-ready result
 ```
 
-The dashboard was completed before final alert operationalization and did not need redesign after detection v1.0 stabilized.
+The dashboard was completed before alert operationalization and did not need redesign after detection v1.0 stabilized.
