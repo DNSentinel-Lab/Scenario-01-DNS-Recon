@@ -2,8 +2,6 @@
 
 **Detection Engineering set:** **✅ Curated**
 
-The public evidence set is intentionally small. It shows the decisions that matter without turning the repository into a dump of every intermediate screen.
-
 ## Detection Engineering evidence
 
 | # | File | What it proves |
@@ -24,25 +22,8 @@ The public evidence set is intentionally small. It shows the decisions that matt
 
 ## Troubleshooting appendix
 
-Only the failures that produced reusable engineering lessons were kept.
-
 | File | What it captures |
 |---|---|
 | [`troubleshooting/t01-kinesis-kvstore-failure.png`](troubleshooting/t01-kinesis-kvstore-failure.png) | Kinesis checkpoint failure tied to KV Store initialization rather than the detection rule |
 | [`troubleshooting/t02-compatible-kernel-recovery.png`](troubleshooting/t02-compatible-kernel-recovery.png) | Reversible kernel fallback / service recovery evidence |
 | [`troubleshooting/t03-webhook-schema-failure.png`](troubleshooting/t03-webhook-schema-failure.png) | HTTP 400 schema failure that led to the final alert evidence contract |
-
-## Deliberately excluded
-
-The final repository does not keep:
-
-- duplicate screenshots of the same search;
-- Save As dialogs covering evidence;
-- accidental wrong-command screens;
-- repeated empty-result screens that add no new finding;
-- every Dashboard Studio construction step;
-- abandoned layouts;
-- minor syntax corrections;
-- repetitive terminal output.
-
-Those were useful while building the scenario but do not make the engineering story clearer for another analyst or recruiter.
