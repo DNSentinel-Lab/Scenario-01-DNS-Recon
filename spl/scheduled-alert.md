@@ -4,7 +4,7 @@
 **Detection:** [`detection.spl`](detection.spl)  
 **Detection version:** `1.0`
 
-## Final configuration
+## Configuration
 
 | Setting | Final value |
 |---|---|
@@ -27,13 +27,11 @@
 
 Fresh Route 53 events were normally searchable within tens of seconds / approximately one to two minutes. A three-minute overlapping lookback gives the scheduler room for normal delivery variation while the 60-second throttle reduces duplicate notifications from overlapping windows.
 
-Older multi-hour backlog outliers were recorded as ingestion anomalies; they were not used as the normal alerting target.
-
 ## Trigger evidence
 
 ![Scheduled alert trigger history](../screenshots/detection-engineering/09-scheduled-alert-triggered.png)
 
-The final alert fired automatically on a fresh controlled source/window and preserved the expected evidence row.
+The alert fired automatically on a fresh controlled source/window and preserved the expected evidence row.
 
 ## Analyst-ready result
 
@@ -75,4 +73,4 @@ The alert summary is never the only evidence. The raw Route 53 pivot in [`huntin
 
 ## AI action boundary
 
-The Webhook forwards the structured alert to the shared AI bridge. The LLM does not determine whether the detection fires; it receives the already-fired evidence and returns analyst assistance.
+The Webhook forwards the structured alert to the shared AI bridge. The LLM does not determine whether the detection fires; it receives the already-fired alert and returns analyst assistance.
