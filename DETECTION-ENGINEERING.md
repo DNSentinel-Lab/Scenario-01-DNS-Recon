@@ -38,7 +38,7 @@ real Route 53 events
     → AI result returned to Splunk
 ```
 
-The official synchronized Scenario 01 exercise is a later phase. The controlled queries used here were **Detection Engineering validation traffic**, not the final attack exercise.
+The official synchronized Scenario 01 exercise is a later phase. The controlled queries used here were **Detection Engineering validation traffic**.
 
 ---
 
@@ -53,7 +53,7 @@ index=dns_soc_aws
 sourcetype=aws:kinesis
 ```
 
-Rather than inventing field names, the raw event structure was inspected and normalized at search time.
+The raw event structure was inspected and normalized at search time.
 
 The validated fields became:
 
@@ -178,7 +178,7 @@ The dashboard was built before the final alert so Sonia could see how an analyst
 
 ![Final Scenario 01 dashboard](screenshots/detection-engineering/04-dns-investigation-dashboard.png)
 
-The final Dashboard Studio implementation contains:
+The Dashboard Studio implementation contains:
 
 ### Shared controls
 
@@ -223,7 +223,7 @@ What did Route 53 return?
 Which exact events support the summary?
 ```
 
-The dashboard was not treated as decoration. It became an investigation surface used to reason about the rule.
+The dashboard became an investigation surface used to reason about the rule.
 
 ---
 
@@ -361,7 +361,7 @@ Instead of treating the duplicate as proof that the threshold was wrong, the beh
 
 A minimal benign test used ordinary A/AAAA lookups rather than enumeration across several names and record types.
 
-The exact final detection logic was run unchanged.
+The exact detection logic was run unchanged.
 
 ![Benign test no detection](screenshots/detection-engineering/07-benign-no-detection.png)
 
@@ -375,7 +375,7 @@ This did not prove the rule could never produce a false positive. It proved the 
 
 ---
 
-## 11. Finalize detection v1.0
+## 11. Detection SPL
 
 With the positive and benign behavior separated, the rule was promoted from engineering prototype to:
 
@@ -432,7 +432,7 @@ The final scheduled alert is:
 
 ```text
 Name:            Scenario 01 - Possible DNS Reconnaissance
-Cron:            * * * * *
+Cron expression: * * * *
 Search lookback: Last 3 minutes
 Trigger:         Number of Results > 0
 Trigger mode:    Once
@@ -507,7 +507,7 @@ Splunk internal logs showed Kinesis checkpoint failures and KV Store initializat
 
 The running host kernel was the newer `7.0.0-1011-aws`, while a compatible `6.17.0-1017-aws` kernel remained installed.
 
-The recovery was deliberately reversible: a one-time GRUB boot into the compatible kernel was used instead of deleting KV Store state, reinstalling Splunk, destroying volumes or removing the newer kernel.
+The recovery was deliberately reversible: a one-time GRUB boot into the compatible kernel was used.
 
 ![Compatible kernel recovery](screenshots/troubleshooting/t02-compatible-kernel-recovery.png)
 
@@ -522,7 +522,7 @@ After restart:
 
 **When fresh events disappear, validate the ingestion chain before rewriting a working detection.**
 
-This troubleshooting crossed Splunk, Docker, KV Store/MongoDB, Linux boot/kernel behavior and AWS Kinesis without destroying existing configuration.
+This troubleshooting crossed Splunk, Docker, KV Store/MongoDB, Linux boot/kernel behavior and AWS Kinesis without breaking existing configuration.
 
 ---
 
@@ -564,8 +564,6 @@ evidence_json
 The final detection was extended to generate those fields while preserving the original SOC evidence columns.
 
 ![AI alert evidence contract](screenshots/detection-engineering/11-ai-alert-evidence-contract.png)
-
-No redesign of Kinesis, Docker networking, the shared Flask bridge or the OpenAI path was needed.
 
 ### Engineering lesson
 
@@ -658,7 +656,7 @@ protect known-good configuration
 
 By the end of the work, the role covered much more than writing a query. It involved DNS semantics, Splunk SPL, dashboard engineering, baseline analysis, scheduler behavior, internal logs, Linux troubleshooting, Docker services, JSON contracts, Webhooks, OpenAI integration and HEC validation.
 
-The result is stronger because the problems were not hidden. Only the reusable ones are preserved here, along with the reasoning that resolved them.
+The result is stronger because the problems were not hidden. Only the reusable ones are documented here, along with the reasoning that resolved them.
 
 ---
 
@@ -682,8 +680,8 @@ The result is stronger because the problems were not hidden. Only the reusable o
 ### Alert engineering lessons
 
 - Scheduled-alert timing should reflect actual ingestion behavior.
-- Overlapping windows can create repeated triggers; document and control them with alert settings rather than hiding the behavior.
-- Validate the actual triggered result, not only the Alerts list.
+- Overlapping windows can create repeated triggers; document and control them with alert settings.
+- Validate the actual triggered result.
 
 ### Troubleshooting lessons
 
@@ -695,7 +693,7 @@ The result is stronger because the problems were not hidden. Only the reusable o
 ### AI lessons
 
 - Stabilize the human analyst evidence contract first.
-- Send evidence to the LLM, not a predetermined conclusion.
+- Send evidence to the LLM.
 - Keep raw Splunk evidence directly accessible.
 - AI output remains advisory; `human_validation_required=true` is part of the design.
 
