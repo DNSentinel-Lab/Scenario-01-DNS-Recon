@@ -45,13 +45,13 @@ trusted DNS telemetry
 
 **[Sonia](https://github.com/sonia11mansha415)** owned the Scenario 01 Detection Engineering lifecycle.
 
-This was her first end-to-end Detection Engineering assignment. She worked from raw telemetry rather than a prebuilt rule, mapped the real DNS fields, measured ingestion behavior, established a baseline, engineered the investigation dashboard, built hunting and detection SPL, validated positive and benign traffic, operationalized the rule as a scheduled alert, debugged cross-layer telemetry and alert-action failures, and completed the Scenario 01 AI evidence path back into Splunk.
+This was her first end-to-end Detection Engineering assignment. She worked from raw telemetry, mapped the real DNS fields, measured ingestion behavior, established a baseline, engineered the investigation dashboard, built hunting and detection SPL, validated positive and benign traffic, operationalized the rule as a scheduled alert, debugged cross-layer telemetry and alert-action failures, and completed and validated the Scenario 01 AI evidence path back into Splunk.
 
 Her work is documented in detail in [`DETECTION-ENGINEERING.md`](DETECTION-ENGINEERING.md).
 
 ### Engineering responsibilities completed
 
-| Area | Practical work completed |
+| Area | Practical work demonstrated |
 |---|---|
 | **Telemetry understanding** | Mapped real Route 53 authoritative records and preserved neutral source semantics |
 | **Baseline engineering** | Measured normal query volume, unique-name breadth and query-type diversity before threshold selection |
@@ -60,7 +60,7 @@ Her work is documented in detail in [`DETECTION-ENGINEERING.md`](DETECTION-ENGIN
 | **Detection engineering** | Developed and finalized behavioral detection `v1.0` from observed evidence |
 | **Validation** | Proved controlled positive behavior triggers and benign/basic DNS activity remains below threshold |
 | **Alert engineering** | Created, tuned and validated the scheduled Splunk alert and analyst evidence row |
-| **Troubleshooting** | Isolated Kinesis/KV Store, Linux kernel, scheduler, webhook and schema failures without destroying known-good configuration |
+| **Troubleshooting** | Isolated Kinesis/KV Store, Linux kernel, scheduler, webhook and schema failures |
 | **AI integration** | Mapped stable alert fields into the shared AI bridge and validated the result in `dns_soc_ai` |
 
 ## 🧠 Final detection at a glance
@@ -128,7 +128,7 @@ The tested Dashboard Studio definition is committed as [`dashboard/scenario-01-d
 
 See [`evidence/detection-engineering-validation.md`](evidence/detection-engineering-validation.md) for the evidence-backed validation record.
 
-## 🚨 Final scheduled alert
+## 🚨 Scheduled alert
 
 **Alert:** `Scenario 01 - Possible DNS Reconnaissance`
 
@@ -142,15 +142,15 @@ Severity:        Medium
 Actions:         Add to Triggered Alerts + Webhook
 ```
 
-![Final scheduled alert trigger](screenshots/detection-engineering/09-scheduled-alert-triggered.png)
+![Scheduled alert trigger](screenshots/detection-engineering/09-scheduled-alert-triggered.png)
 
-*The final scheduled alert is enabled, fires automatically and forwards the structured result to the shared AI bridge.*
+*The scheduled alert is enabled, fires automatically and forwards the structured result to the shared AI bridge.*
 
 Full configuration notes are in [`spl/scheduled-alert.md`](spl/scheduled-alert.md).
 
 ## 🤖 Scenario 01 AI evidence path
 
-The detection remains independent of the LLM. After the final alert fields were stable, Sonia mapped them into the already-deployed shared AI bridge:
+The detection remains independent of the LLM. After the alert fields were stable, Sonia mapped them into the already-deployed shared AI bridge:
 
 ```text
 Detection v1.0
@@ -195,13 +195,14 @@ Supporting telemetry exists in the shared lab, but this Detection Engineering ph
 
 ## 🧩 Engineering challenges that mattered
 
-Three troubleshooting cases materially improved the final implementation:
+Three troubleshooting cases materially improved the implementation:
 
 1. **Fresh Route 53 telemetry stopped arriving.** Sonia traced the failure past the detection into the AWS Kinesis collector, found KV Store checkpoint errors, and helped isolate a Splunk KV Store/MongoDB startup problem on the newer kernel.
-2. **The scheduled alert fired but AI processing failed.** The webhook path was healthy; the bridge rejected the payload because the alert result did not match the required schema. Sonia corrected the detection evidence contract instead of rebuilding working networking or containers.
+2. **The scheduled alert fired but AI processing failed.** The webhook path was healthy; the bridge rejected the payload because the alert result did not match the required schema. Sonia then further corrected the [**detection spl**](https://github.com/DNSentinel-Lab/Scenario-01-DNS-Recon/blob/main/spl/detection.spl).
+
 3. **AI output reached Splunk but initially looked empty in a table.** The event was nested JSON. Sonia extracted the correct `alert.*` and `ai.*` paths and produced a clean analyst view.
 
-The full technical story and reusable lessons are in [`DETECTION-ENGINEERING.md`](DETECTION-ENGINEERING.md).
+The full technical story and lessons learned are in [`DETECTION-ENGINEERING.md`](DETECTION-ENGINEERING.md).
 
 ## 🗂️ Repository map
 
