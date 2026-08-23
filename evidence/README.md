@@ -3,7 +3,7 @@
 **Detection Engineering evidence status:** **✅ Complete**  
 **Official scenario evidence status:** ⏳ Pending synchronized SOC/IR exercise
 
-This folder preserves structured non-image evidence. Curated screenshots are indexed separately in [`../screenshots/README.md`](../screenshots/README.md).
+This folder preserves structured non-image evidence. Screenshots are indexed separately in [`../screenshots/README.md`](../screenshots/README.md).
 
 ## Current evidence record
 
@@ -22,9 +22,9 @@ This folder preserves structured non-image evidence. Curated screenshots are ind
 
 ## Evidence rule
 
-This repository does not preserve every troubleshooting attempt. It keeps the evidence that proves a decision or teaches a reusable engineering lesson.
+This repository keeps the evidence that proves a decision or teaches a reusable engineering lesson.
 
-The following official-exercise records are intentionally still absent and must be added only when they happen:
+The following official-exercise records are absent and must be added only when they happen:
 
 - official attack/simulation start/end ground truth;
 - SOC Analyst timeline and final disposition;
