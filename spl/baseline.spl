@@ -1,0 +1,24 @@
+# Scenario 01 — Baseline summary
+# Detection Engineer: Sonia
+# Run over a clean normal period (the implemented engineering baseline used Last 24 hours).
+# Purpose: quantify normal source/window query volume, name breadth and record-type diversity.
+
+index=dns_soc_aws sourcetype="aws:kinesis"
+| rex field=_raw "^(?<log_version>\S+)\s+(?<route53_event_time>\S+)\s+(?<hosted_zone_id>\S+)\s+(?<query_name>\S+)\s+(?<query_type>\S+)\s+(?<response_code>\S+)\s+(?<protocol>\S+)\s+(?<edge_location>\S+)\s+(?<observed_dns_source>\S+)\s+(?<edns_client_subnet>\S+)"
+| bin _time span=15m
+| stats count as query_count
+        dc(query_name) as unique_names
+        dc(query_type) as distinct_query_types
+        count(eval(response_code="NXDOMAIN")) as nxdomain_count
+  by _time observed_dns_source
+| eval nxdomain_ratio=round((nxdomain_count/query_count)*100,2)
+| stats count as source_windows
+        median(query_count) as median_queries
+        perc95(query_count) as p95_queries
+        max(query_count) as max_queries
+        median(unique_names) as median_unique_names
+        perc95(unique_names) as p95_unique_names
+        max(unique_names) as max_unique_names
+        median(distinct_query_types) as median_query_types
+        perc95(distinct_query_types) as p95_query_types
+        max(distinct_query_types) as max_query_types

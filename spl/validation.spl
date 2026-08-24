@@ -1,0 +1,27 @@
+# Scenario 01 — Detection validation view
+# Detection Engineer: Sonia
+# Purpose: apply the final v1.0 boundary to all relevant source/windows while
+# retaining both positive and below-threshold rows for engineering review.
+
+index=dns_soc_aws sourcetype="aws:kinesis"
+| rex field=_raw "^(?<log_version>\S+)\s+(?<route53_event_time>\S+)\s+(?<hosted_zone_id>\S+)\s+(?<query_name>\S+)\s+(?<query_type>\S+)\s+(?<response_code>\S+)\s+(?<protocol>\S+)\s+(?<edge_location>\S+)\s+(?<observed_dns_source>\S+)\s+(?<edns_client_subnet>\S+)"
+| eval query_name=lower(rtrim(query_name,"."))
+| where query_name="soclab.abdul4rehman215.tech" OR match(query_name,"\.soclab\.abdul4rehman215\.tech$")
+| eval event_time=_time
+| bin _time span=1m
+| stats min(event_time) as first_event
+        max(event_time) as last_event
+        count as query_count
+        dc(query_name) as unique_names
+        dc(query_type) as distinct_query_types
+        values(query_type) as query_types
+        values(query_name) as query_name_samples
+        values(response_code) as response_codes
+        count(eval(response_code="NXDOMAIN")) as nxdomain_count
+  by _time observed_dns_source
+| eval validation_status=if(query_count>=16 AND unique_names>=4 AND distinct_query_types>=3,
+    "WOULD DETECT",
+    "BELOW THRESHOLD")
+| convert ctime(first_event) ctime(last_event)
+| table first_event last_event observed_dns_source query_count unique_names distinct_query_types query_types query_name_samples response_codes nxdomain_count validation_status
+| sort - query_count

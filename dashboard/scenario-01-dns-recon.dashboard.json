@@ -1,0 +1,457 @@
+{
+  "dataSources": {
+    "ds_WDDuf7KL": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=_internal earliest=-15m ( \"Shared AI Foundation - Strong Evidence Synthetic Test\" OR \"dns-soc-ai-bridge\" OR \"splunk-webhook\" OR \"sendmodalert\" OR \"webhook\" ) | table _time source component log_level message | sort - _time",
+        "queryParameters": {
+          "earliest": "-24h@h",
+          "latest": "now",
+          "sampleRatio": 1
+        }
+      },
+      "name": "Table search"
+    },
+    "ds_KqyNy8ir": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| bin _time span=1m\r\n| stats count as query_count\r\n        dc(query_name) as unique_names\r\n        dc(query_type) as distinct_query_types\r\n        values(query_type) as query_types\r\n  by _time observed_dns_source\r\n| sort - query_count - distinct_query_types\r\n| head 20",
+        "queryParameters": {
+          "earliest": "-24h@h",
+          "latest": "now",
+          "sampleRatio": 1
+        }
+      },
+      "name": "Top Reconnaissance Sources - Table search"
+    },
+    "ds_sRF8DiYm": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| stats count as total_dns_queries"
+      },
+      "name": "Search_1"
+    },
+    "ds_wEWerkxf": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| stats dc(query_name) as unique_names"
+      },
+      "name": "Search_2"
+    },
+    "ds_BMMBjH62": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"(?<route53_query_name>\\S+)\\s+(?<route53_query_type>[A-Z0-9]+)\\s+(?<route53_response>[A-Z0-9]+)\"\r\n| stats dc(route53_query_name) as unique_names"
+      },
+      "name": "Search_2 copy 1"
+    },
+    "ds_AA2YLPL1": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"(?<route53_query_name>\\S+)\\s+(?<route53_query_type>[A-Z0-9]+)\\s+(?<route53_response>[A-Z0-9]+)\"\r\n| stats dc(route53_query_name) as unique_names"
+      },
+      "name": "Search_2 copy 2"
+    },
+    "ds_lfab9pZb": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| stats count as total_dns_queries"
+      },
+      "name": "Search_1 copy 3"
+    },
+    "ds_ZqzPRUvW": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| stats dc(query_type) as distinct_types"
+      },
+      "name": "Search_3"
+    },
+    "ds_ivZssgCy": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| stats dc(observed_dns_source) as observed_sources"
+      },
+      "name": "Search_4"
+    },
+    "ds_dvBen2sa": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| stats count(eval(response_code=\"NXDOMAIN\")) as nxdomain_count"
+      },
+      "name": "Search_5"
+    },
+    "ds_U9kEute0": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| timechart span=15m count as dns_queries"
+      },
+      "name": "Search_6"
+    },
+    "ds_uR8oD2Qu": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| timechart span=15m dc(query_type) as distinct_query_types"
+      },
+      "name": "Search_7"
+    },
+    "ds_xIIWcwvj": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| stats count by query_type | sort - count"
+      },
+      "name": "Search_8"
+    },
+    "ds_788DUxGi": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| stats count by query_name | sort - count | head 15"
+      },
+      "name": "Search_9"
+    },
+    "ds_YZcRY6iV": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| stats count by response_code | sort - count"
+      },
+      "name": "Search_10"
+    },
+    "ds_Y8CR0HXy": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| table _time observed_dns_source edns_client_subnet query_name query_type response_code protocol edge_location\r\n| sort - _time\r\n| head 50"
+      },
+      "name": "Search_11"
+    },
+    "ds_JSYpimzO": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"(?<route53_query_name>\\S+)\\s+(?<route53_query_type>[A-Z0-9]+)\\s+(?<route53_response>[A-Z0-9]+)\"\r\n| timechart count by route53_query_type"
+      },
+      "name": "Search_12"
+    },
+    "ds_WhB9n3Yh": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| table _time observed_dns_source edns_client_subnet query_name query_type response_code protocol edge_location\r\n| sort - _time\r\n| head 50"
+      },
+      "name": "Search_13"
+    },
+    "ds_RwgE3Ma6": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| search observed_dns_source=\"$dd_TF6Tr3fm$\"\r\n| bin _time span=1m\r\n| stats count as query_count\r\n        dc(query_name) as unique_names\r\n        dc(query_type) as distinct_query_types\r\n        values(query_type) as query_types\r\n        values(query_name) as query_names\r\n  by _time observed_dns_source\r\n| sort - query_count - distinct_query_types\r\n| head 20"
+      },
+      "name": "Search_14"
+    },
+    "ds_UgGfc5sF": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=dns_soc_aws sourcetype=\"aws:kinesis\"\r\n| rex field=_raw \"^(?<log_version>\\S+)\\s+(?<route53_event_time>\\S+)\\s+(?<hosted_zone_id>\\S+)\\s+(?<query_name>\\S+)\\s+(?<query_type>\\S+)\\s+(?<response_code>\\S+)\\s+(?<protocol>\\S+)\\s+(?<edge_location>\\S+)\\s+(?<observed_dns_source>\\S+)\\s+(?<edns_client_subnet>\\S+)\"\r\n| stats count by observed_dns_source\r\n| sort observed_dns_source"
+      },
+      "name": "Search_15"
+    }
+  },
+  "visualizations": {
+    "viz_limod8hN": {
+      "type": "splunk.singlevalue",
+      "dataSources": {
+        "primary": "ds_sRF8DiYm"
+      },
+      "title": "Total DNS Queries"
+    },
+    "viz_34yGqeK7": {
+      "type": "splunk.singlevalue",
+      "dataSources": {
+        "primary": "ds_wEWerkxf"
+      },
+      "title": "Unique Queried Names"
+    },
+    "viz_SKLRVdye": {
+      "type": "splunk.singlevalue",
+      "dataSources": {
+        "primary": "ds_ZqzPRUvW"
+      },
+      "title": "Distinct Query Types"
+    },
+    "viz_dCD4THpw": {
+      "type": "splunk.singlevalue",
+      "dataSources": {
+        "primary": "ds_ivZssgCy"
+      },
+      "title": "Observed DNS Sources"
+    },
+    "viz_CvAlz29D": {
+      "type": "splunk.singlevalue",
+      "dataSources": {
+        "primary": "ds_dvBen2sa"
+      },
+      "title": "NXDOMAIN Count"
+    },
+    "viz_glgWWiFh": {
+      "type": "splunk.column",
+      "dataSources": {
+        "primary": "ds_U9kEute0"
+      },
+      "title": "DNS Activity Over Time"
+    },
+    "viz_qOOjAo2b": {
+      "type": "splunk.column",
+      "dataSources": {
+        "primary": "ds_uR8oD2Qu"
+      },
+      "title": "Record-Type Diversity Over Time"
+    },
+    "viz_PEWx6QJU": {
+      "type": "splunk.column",
+      "dataSources": {
+        "primary": "ds_xIIWcwvj"
+      },
+      "title": "Query-Type Distribution"
+    },
+    "viz_hLxM6inT": {
+      "type": "splunk.column",
+      "dataSources": {
+        "primary": "ds_788DUxGi"
+      },
+      "title": "Top Queried Names"
+    },
+    "viz_HIRMDJlt": {
+      "type": "splunk.column",
+      "dataSources": {
+        "primary": "ds_YZcRY6iV"
+      },
+      "title": "Response Distribution"
+    },
+    "viz_VwcFVoe9": {
+      "type": "splunk.table",
+      "dataSources": {
+        "primary": "ds_WhB9n3Yh"
+      },
+      "title": "DNS Investigation Events"
+    },
+    "viz_rAVhfrzw": {
+      "type": "splunk.table",
+      "dataSources": {
+        "primary": "ds_RwgE3Ma6"
+      },
+      "title": "Top 1-Minute DNS Bursts"
+    }
+  },
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  },
+  "inputs": {
+    "input_global_trp": {
+      "type": "input.timerange",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      },
+      "title": "Global Time Range"
+    },
+    "input_gzZtDrz6": {
+      "options": {
+        "items": ">frame(label, value) | prepend(formattedStatics) | objects()",
+        "defaultValue": "*",
+        "token": "dd_TF6Tr3fm"
+      },
+      "title": "Observed DNS Source",
+      "type": "input.dropdown",
+      "dataSources": {
+        "primary": "ds_UgGfc5sF"
+      },
+      "context": {
+        "formattedConfig": {
+          "number": {
+            "prefix": ""
+          }
+        },
+        "formattedStatics": ">statics | formatByType(formattedConfig)",
+        "statics": [
+          [
+            "All"
+          ],
+          [
+            "*"
+          ]
+        ],
+        "label": ">primary | seriesByName(\"observed_dns_source\") | renameSeries(\"label\") | formatByType(formattedConfig)",
+        "value": ">primary | seriesByName(\"observed_dns_source\") | renameSeries(\"value\") | formatByType(formattedConfig)"
+      }
+    }
+  },
+  "layout": {
+    "options": {},
+    "globalInputs": [
+      "input_global_trp",
+      "input_gzZtDrz6"
+    ],
+    "tabs": {
+      "items": [
+        {
+          "layoutId": "layout_1",
+          "label": "New tab"
+        }
+      ]
+    },
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "grid",
+        "structure": [
+          {
+            "item": "viz_VwcFVoe9",
+            "type": "block",
+            "position": {
+              "x": 0,
+              "y": 1805,
+              "w": 1440,
+              "h": 325
+            }
+          },
+          {
+            "item": "viz_rAVhfrzw",
+            "type": "block",
+            "position": {
+              "x": 0,
+              "y": 2130,
+              "w": 1440,
+              "h": 679
+            }
+          },
+          {
+            "item": "viz_SKLRVdye",
+            "type": "block",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "w": 243,
+              "h": 222
+            }
+          },
+          {
+            "item": "viz_dCD4THpw",
+            "type": "block",
+            "position": {
+              "x": 243,
+              "y": 0,
+              "w": 288,
+              "h": 222
+            }
+          },
+          {
+            "item": "viz_limod8hN",
+            "type": "block",
+            "position": {
+              "x": 531,
+              "y": 0,
+              "w": 315,
+              "h": 222
+            }
+          },
+          {
+            "item": "viz_34yGqeK7",
+            "type": "block",
+            "position": {
+              "x": 846,
+              "y": 0,
+              "w": 260,
+              "h": 222
+            }
+          },
+          {
+            "item": "viz_CvAlz29D",
+            "type": "block",
+            "position": {
+              "x": 1106,
+              "y": 0,
+              "w": 334,
+              "h": 222
+            }
+          },
+          {
+            "item": "viz_qOOjAo2b",
+            "type": "block",
+            "position": {
+              "x": 720,
+              "y": 222,
+              "w": 720,
+              "h": 558
+            }
+          },
+          {
+            "item": "viz_glgWWiFh",
+            "type": "block",
+            "position": {
+              "x": 0,
+              "y": 222,
+              "w": 720,
+              "h": 558
+            }
+          },
+          {
+            "item": "viz_hLxM6inT",
+            "type": "block",
+            "position": {
+              "x": 720,
+              "y": 780,
+              "w": 720,
+              "h": 533
+            }
+          },
+          {
+            "item": "viz_PEWx6QJU",
+            "type": "block",
+            "position": {
+              "x": 0,
+              "y": 780,
+              "w": 720,
+              "h": 533
+            }
+          },
+          {
+            "item": "viz_HIRMDJlt",
+            "type": "block",
+            "position": {
+              "x": 0,
+              "y": 1313,
+              "w": 1440,
+              "h": 492
+            }
+          }
+        ],
+        "options": {
+          "width": 1440,
+          "height": 960
+        }
+      }
+    }
+  },
+  "title": "Scenario 01 — DNS Reconnaissance Investigation",
+  "description": "",
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "latest": "$global_time.latest$",
+            "earliest": "$global_time.earliest$"
+          }
+        }
+      },
+      "ds.spl2": {
+        "options": {
+          "queryParameters": {
+            "latest": "$global_time.latest$",
+            "earliest": "$global_time.earliest$"
+          }
+        }
+      }
+    },
+    "visualizations": {
+      "global": {
+        "showProgressBar": true
+      }
+    }
+  }
+}
