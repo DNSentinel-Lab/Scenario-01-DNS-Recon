@@ -1,0 +1,40 @@
+# Scenario 01 — Hunting SPL
+# Detection Engineer: Sonia
+# These are two standalone searches. Run one block at a time.
+
+# -----------------------------------------------------------------------------
+# HUNT 1 — Source/window DNS reconnaissance behavior
+# Purpose: summarize concentration, name breadth, type diversity and response
+# context without applying the final detection threshold.
+# -----------------------------------------------------------------------------
+
+index=dns_soc_aws sourcetype="aws:kinesis"
+| rex field=_raw "^(?<log_version>\S+)\s+(?<route53_event_time>\S+)\s+(?<hosted_zone_id>\S+)\s+(?<query_name>\S+)\s+(?<query_type>\S+)\s+(?<response_code>\S+)\s+(?<protocol>\S+)\s+(?<edge_location>\S+)\s+(?<observed_dns_source>\S+)\s+(?<edns_client_subnet>\S+)"
+| eval query_name=lower(rtrim(query_name,"."))
+| where query_name="soclab.abdul4rehman215.tech" OR match(query_name,"\.soclab\.abdul4rehman215\.tech$")
+| bin _time span=1m
+| stats min(_time) as first_event
+        max(_time) as last_event
+        count as query_count
+        dc(query_name) as unique_names
+        dc(query_type) as distinct_query_types
+        values(query_type) as query_types
+        values(query_name) as query_names
+        values(response_code) as response_codes
+        count(eval(response_code="NXDOMAIN")) as nxdomain_count
+  by _time observed_dns_source
+| convert ctime(first_event) ctime(last_event)
+| sort - query_count - distinct_query_types - unique_names
+
+# -----------------------------------------------------------------------------
+# HUNT 2 — Raw DNS evidence pivot
+# Purpose: move from a suspicious source/window summary back to the exact
+# authoritative DNS records used by the analyst.
+# -----------------------------------------------------------------------------
+
+index=dns_soc_aws sourcetype="aws:kinesis"
+| rex field=_raw "^(?<log_version>\S+)\s+(?<route53_event_time>\S+)\s+(?<hosted_zone_id>\S+)\s+(?<query_name>\S+)\s+(?<query_type>\S+)\s+(?<response_code>\S+)\s+(?<protocol>\S+)\s+(?<edge_location>\S+)\s+(?<observed_dns_source>\S+)\s+(?<edns_client_subnet>\S+)"
+| eval query_name=lower(rtrim(query_name,"."))
+| where query_name="soclab.abdul4rehman215.tech" OR match(query_name,"\.soclab\.abdul4rehman215\.tech$")
+| table _time observed_dns_source query_name query_type response_code protocol edge_location edns_client_subnet
+| sort - _time
