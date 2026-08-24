@@ -90,7 +90,6 @@ flowchart LR
 
 <table>
 <tr>
-<td width="50%"><img src="screenshots/detection-engineering/04-dns-investigation-dashboard.png" alt="Splunk investigation dashboard"><br/><sub><b>Detection Engineering:</b> final investigation dashboard.</sub></td>
 <td width="50%"><img src="screenshots/soc/case-01/Case-01_E01_Production-Detection-Triggered.png" alt="Case 01 detection"><br/><sub><b>Case 01:</b> real alert, authorized activity.</sub></td>
 </tr>
 <tr>
