@@ -67,7 +67,7 @@ observed_dns_source
 edns_client_subnet
 ```
 
-![Route 53 field mapping](screenshots/detection-engineering/01-route53-field-mapping.png)
+![Route 53 field mapping](../screenshots/detection-engineering/01-route53-field-mapping.png)
 
 *Raw authoritative DNS events were mapped into stable investigation fields before detection logic was written.*
 
@@ -107,7 +107,7 @@ Two older windows were very different and showed delayed/backlogged delivery of 
 12,974 seconds  ≈ 3h 36m
 ```
 
-![Route 53 ingestion latency](screenshots/detection-engineering/02-route53-ingestion-latency.png)
+![Route 53 ingestion latency](../screenshots/detection-engineering/02-route53-ingestion-latency.png)
 
 *The latency review separated normal current delivery from older backlog outliers instead of averaging them together.*
 
@@ -137,7 +137,7 @@ The 24-hour summary contained **97 source/windows** and produced the following o
 | Unique queried names | 1 | 2 | 3 |
 | Distinct query types | 1 | 6 | 8 |
 
-![Baseline validation](screenshots/detection-engineering/03-baseline-validation.png)
+![Baseline validation](../screenshots/detection-engineering/03-baseline-validation.png)
 
 *The baseline showed that public/background DNS can occasionally have high record-type diversity even when query volume and name breadth remain small.*
 
@@ -176,7 +176,7 @@ The dashboard was built before the final alert so Sonia could see how an analyst
 
 **Scenario 01 — DNS Reconnaissance Investigation**
 
-![Final Scenario 01 dashboard](screenshots/detection-engineering/04-dns-investigation-dashboard.png)
+![Final Scenario 01 dashboard](../screenshots/detection-engineering/04-dns-investigation-dashboard.png)
 
 The Dashboard Studio implementation contains:
 
@@ -208,7 +208,7 @@ The Dashboard Studio implementation contains:
 
 The exported implementation is stored in:
 
-[`dashboard/scenario-01-dns-recon.dashboard.json`](dashboard/scenario-01-dns-recon.dashboard.json)
+[`dashboard/scenario-01-dns-recon.dashboard.json`](../dashboard/scenario-01-dns-recon.dashboard.json)
 
 ### Why this mattered
 
@@ -245,7 +245,7 @@ This search grouped DNS activity into one-minute source/windows and exposed:
 
 No detection threshold was applied.
 
-![Hunting source/window behavior](screenshots/detection-engineering/05-hunting-source-window-behavior.png)
+![Hunting source/window behavior](../screenshots/detection-engineering/05-hunting-source-window-behavior.png)
 
 ### Hunt 2 — raw DNS evidence pivot
 
@@ -271,7 +271,7 @@ raw-event pivot   → proves what actually happened
 
 This distinction later became the basis for alert evidence and analyst drilldown.
 
-The final hunts are preserved in [`spl/hunting.spl`](spl/hunting.spl).
+The final hunts are preserved in [`spl/hunting.spl`](../spl/hunting.spl).
 
 ---
 
@@ -329,13 +329,13 @@ The test produced:
 A, AAAA, MX, NS, TXT
 ```
 
-![Controlled positive test traffic](screenshots/detection-engineering/06a-controlled-positive-test-traffic.png)
+![Controlled positive test traffic](../screenshots/detection-engineering/06a-controlled-positive-test-traffic.png)
 
 *The positive test was intentionally small and used only the authorized Scenario 01 lab namespace.*
 
 ### Detection result
 
-![Controlled positive detection](screenshots/detection-engineering/06-controlled-positive-detection.png)
+![Controlled positive detection](../screenshots/detection-engineering/06-controlled-positive-detection.png)
 
 The result crossed the engineering threshold with approximately:
 
@@ -363,7 +363,7 @@ A minimal benign test used ordinary A/AAAA lookups rather than enumeration acros
 
 The exact detection logic was run unchanged.
 
-![Benign test no detection](screenshots/detection-engineering/07-benign-no-detection.png)
+![Benign test no detection](../screenshots/detection-engineering/07-benign-no-detection.png)
 
 *Basic DNS activity remained below the detection conditions.*
 
@@ -403,9 +403,9 @@ Core evidence includes:
 - severity/rationale;
 - Scenario 01 / AI contract fields.
 
-![Final detection v1.0 validation](screenshots/detection-engineering/08-final-detection-v1-validation.png)
+![Final detection v1.0 validation](../screenshots/detection-engineering/08-final-detection-v1-validation.png)
 
-The production search is in [`spl/detection.spl`](spl/detection.spl).
+The production search is in [`spl/detection.spl`](../spl/detection.spl).
 
 ---
 
@@ -420,7 +420,7 @@ BELOW THRESHOLD
 
 That gives the Detection Engineer a fast way to compare current behavior with the final rule without editing the detection itself.
 
-The search is preserved in [`spl/validation.spl`](spl/validation.spl).
+The search is preserved in [`spl/validation.spl`](../spl/validation.spl).
 
 ---
 
@@ -443,7 +443,7 @@ Actions:         Add to Triggered Alerts + Webhook
 
 The alert was saved in the Search app and validated through actual trigger history.
 
-![Scheduled alert triggered](screenshots/detection-engineering/09-scheduled-alert-triggered.png)
+![Scheduled alert triggered](../screenshots/detection-engineering/09-scheduled-alert-triggered.png)
 
 ### Why the three-minute lookback exists
 
@@ -451,7 +451,7 @@ The lookback is intentionally wider than the normal observed tens-of-seconds Rou
 
 The throttle limits repeated notifications when overlapping scheduled windows include the same burst.
 
-Detailed configuration is preserved in [`spl/scheduled-alert.md`](spl/scheduled-alert.md).
+Detailed configuration is preserved in [`spl/scheduled-alert.md`](../spl/scheduled-alert.md).
 
 ---
 
@@ -461,7 +461,7 @@ The next acceptance test was not “did the alert page exist?” It was whether 
 
 The triggered alert exposes the summarized evidence row and the underlying Route 53 events can be recovered through the raw-event investigation search.
 
-![Raw-event drilldown](screenshots/detection-engineering/10-raw-event-drilldown.png)
+![Raw-event drilldown](../screenshots/detection-engineering/10-raw-event-drilldown.png)
 
 ### Analyst workflow
 
@@ -503,13 +503,13 @@ The known-good detection was protected while the data path was investigated.
 
 Splunk internal logs showed Kinesis checkpoint failures and KV Store initialization errors.
 
-![Kinesis / KV Store failure](screenshots/troubleshooting/t01-kinesis-kvstore-failure.png)
+![Kinesis / KV Store failure](../screenshots/troubleshooting/t01-kinesis-kvstore-failure.png)
 
 The running host kernel was the newer `7.0.0-1011-aws`, while a compatible `6.17.0-1017-aws` kernel remained installed.
 
 The recovery was deliberately reversible: a one-time GRUB boot into the compatible kernel was used.
 
-![Compatible kernel recovery](screenshots/troubleshooting/t02-compatible-kernel-recovery.png)
+![Compatible kernel recovery](../screenshots/troubleshooting/t02-compatible-kernel-recovery.png)
 
 After restart:
 
@@ -539,7 +539,7 @@ HTTP 400 BAD REQUEST
 schema_validation_failed
 ```
 
-![Webhook schema failure](screenshots/troubleshooting/t03-webhook-schema-failure.png)
+![Webhook schema failure](../screenshots/troubleshooting/t03-webhook-schema-failure.png)
 
 ### Diagnosis
 
@@ -563,7 +563,7 @@ evidence_json
 
 The final detection was extended to generate those fields while preserving the original SOC evidence columns.
 
-![AI alert evidence contract](screenshots/detection-engineering/11-ai-alert-evidence-contract.png)
+![AI alert evidence contract](../screenshots/detection-engineering/11-ai-alert-evidence-contract.png)
 
 ### Engineering lesson
 
@@ -601,7 +601,7 @@ Route 53
 
 A fresh `bridge-final*` validation burst reached the complete chain. The bridge's OpenAI request returned HTTP 200 and the resulting event appeared in Splunk.
 
-![AI triage indexed](screenshots/detection-engineering/12-ai-triage-indexed.png)
+![AI triage indexed](../screenshots/detection-engineering/12-ai-triage-indexed.png)
 
 The returned structure includes analyst-assistance fields such as:
 
@@ -615,7 +615,7 @@ The returned structure includes analyst-assistance fields such as:
 - response considerations;
 - `human_validation_required=true`.
 
-Scenario-specific mapping is documented in [`ai/scenario-01-ai-mapping.md`](ai/scenario-01-ai-mapping.md).
+Scenario-specific mapping is documented in [`ai/scenario-01-ai-mapping.md`](../ai/scenario-01-ai-mapping.md).
 
 ---
 
