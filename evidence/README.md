@@ -41,12 +41,3 @@ This folder is the evidence map for the completed Scenario 01 exercise. Visual e
 
 - [`../SCENARIO-01-EXECUTION.md`](../SCENARIO-01-EXECUTION.md)
 - [`../exercise/final-comparison.md`](../exercise/final-comparison.md)
-
-## Evidence discipline
-
-Keep only evidence that proves a fact, a decision or a reusable lesson.
-
-- Route 53 `observed_dns_source` remains resolver/source evidence, not automatic endpoint attribution.
-- AI output is supporting analyst context, not primary evidence.
-- SOC and IR conclusions should be reproducible from defender telemetry.
-- Screenshots should have readable names, visible time ranges where relevant, and captions explaining what they prove.
