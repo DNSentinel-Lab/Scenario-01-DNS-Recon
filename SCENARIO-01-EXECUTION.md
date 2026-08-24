@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](README.md) › **Scenario 01 Execution — DNS Reconnaissance from Adversary to Defender**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 Execution — DNS Reconnaissance from Adversary to Defender
 
 **Status:** ✅ Complete  
@@ -238,3 +247,13 @@ Human investigation then resolved or refined those gaps:
 | Response | SOC closure | Preserve + Monitor; no active containment |
 
 For the full perspective-by-perspective comparison, see [`exercise/final-comparison.md`](exercise/final-comparison.md).
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](README.md) · [🏗️ Infrastructure](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

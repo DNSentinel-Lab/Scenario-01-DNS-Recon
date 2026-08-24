@@ -1,22 +1,109 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=210&section=header&text=Scenario%2001%20%E2%80%94%20DNS%20Reconnaissance&fontSize=38&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=Realistic%20Adversary%20%E2%80%A2%20Detection%20Engineering%20%E2%80%A2%20SOC%20%E2%80%A2%20Incident%20Response&descSize=17&descAlignY=58&descColor=00F5FF" width="100%" alt="Scenario 01 DNS Reconnaissance" />
+<a id="top"></a>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,12,20,24&height=225&section=header&text=Scenario%2001%20%E2%80%94%20DNS%20Reconnaissance&fontSize=38&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=DNSentinel%20Lab%20%7C%20Completed%20SOC%20Case%20File&descSize=16&descAlignY=58&descColor=00F5FF" width="100%" alt="Scenario 01 — DNS Reconnaissance" />
 
 <div align="center">
 
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=21&duration=2900&pause=900&color=00F5FF&center=true&vCenter=true&repeat=true&width=960&height=72&lines=Public+DNS+%E2%86%92+Detection+%E2%86%92+Investigation+%E2%86%92+IR;Two+Cases+%7C+One+Detection+%7C+Evidence-Driven+Decisions" alt="Scenario workflow animation" />
+
 ![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=for-the-badge)
-![Detection](https://img.shields.io/badge/Detection-v1.0_Validated-0A84FF?style=for-the-badge)
-![Splunk](https://img.shields.io/badge/Splunk-Enterprise_10.4.2-000000?style=for-the-badge&logo=splunk&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-Route_53_%2B_Kinesis-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-Security_Lab-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)
+![Splunk](https://img.shields.io/badge/Splunk-Enterprise-000000?style=for-the-badge&logo=splunk&logoColor=white)
+![DNS](https://img.shields.io/badge/DNS-Security-00B8D9?style=for-the-badge)
 ![MITRE](https://img.shields.io/badge/MITRE-T1590.002-E34F26?style=for-the-badge)
+![Route53](https://img.shields.io/badge/Route_53-Authoritative_DNS-8C4FFF?style=for-the-badge&logo=amazonroute53&logoColor=white)
+![AI](https://img.shields.io/badge/AI-Assisted-7B2CBF?style=for-the-badge)
 
-**A completed DNS reconnaissance exercise executed across a real public Internet boundary. The adversary operated outside the defender AWS account, the SOC Analyst investigated only defender-visible evidence, and Incident Response independently validated the escalation before choosing a proportionate response.**
+<br/>
 
-[Execution Story](SCENARIO-01-EXECUTION.md) · [Detection Engineering](detection-engineering/DETECTION-ENGINEERING.md) · [Adversary](attacker/PROJECT-LEAD-ADVERSARY.md) · [SOC Analyst](soc/SOC-ANALYST-INVESTIGATION.md) · [Incident Response](ir/INCIDENT-RESPONSE.md) · [Runbook](SCENARIO-RUNBOOK.md) · [Final Comparison](exercise/final-comparison.md)
+![Stars](https://img.shields.io/github/stars/DNSentinel-Lab/Scenario-01-DNS-Recon?style=flat-square)
+![Forks](https://img.shields.io/github/forks/DNSentinel-Lab/Scenario-01-DNS-Recon?style=flat-square)
+![Last Commit](https://img.shields.io/github/last-commit/DNSentinel-Lab/Scenario-01-DNS-Recon?style=flat-square)
+![Repo Size](https://img.shields.io/github/repo-size/DNSentinel-Lab/Scenario-01-DNS-Recon?style=flat-square)
+![License](https://img.shields.io/github/license/DNSentinel-Lab/Scenario-01-DNS-Recon?style=flat-square)
+![Issues](https://img.shields.io/github/issues/DNSentinel-Lab/Scenario-01-DNS-Recon?style=flat-square)
+
+**A completed, evidence-backed SOC case study covering realistic external DNS reconnaissance, Detection Engineering, AI-assisted investigation, human SOC analysis and independent Incident Response.**
+
+[🏗️ Infrastructure](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure) · [**🔎 Scenario 01**](https://github.com/DNSentinel-Lab/Scenario-01-DNS-Recon) · [🧬 Scenario 02](https://github.com/DNSentinel-Lab/Scenario-02-DGA) · [🔄 Scenario 03](https://github.com/DNSentinel-Lab/Scenario-03-Fast-Flux) · [🛰️ Scenario 04](https://github.com/DNSentinel-Lab/Scenario-04-DNS-Tunneling)
 
 </div>
 
----
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%" alt="section divider" />
 
-## Scenario at a glance
+## 🎯 Mission Brief
+
+| Field | Scenario record |
+|---|---|
+| **Mission** | Detect and investigate public-authoritative DNS reconnaissance without assuming that every unusual DNS pattern is malicious |
+| **Status** | ✅ Completed end-to-end SOC exercise |
+| **MITRE ATT&CK** | `T1590.002 — Gather Victim Network Information: DNS` |
+| **Cyber Kill Chain** | Reconnaissance |
+| **Target namespace** | `soclab.abdul4rehman215.tech` |
+| **Telemetry** | Route 53 authoritative DNS, Splunk, AWS context, Nginx, VPC Flow, AI result |
+| **Operational result** | Case 01 closed by SOC; Case 02 escalated and independently validated by IR |
+
+### What this scenario proves
+
+A correct alert is not the same thing as a confirmed malicious incident. This scenario demonstrates the full decision chain from behavior-based DNS detection through source attribution, AI validation, SOC disposition, independent IR review and proportionate response.
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%" alt="section divider" />
+
+## 🏗️ Scenario Architecture
+
+```mermaid
+flowchart LR
+    ADV["External Adversary<br/>Separate AWS account"] -->|Public DNS recon| R53[Route 53 Authoritative DNS]
+    R53 -->|Query telemetry| SPL[Splunk Enterprise]
+    SPL --> DET[Detection v1.0]
+    DET --> AI[AI-Assisted Summary]
+    DET --> SOC[SOC Investigation]
+    AI --> SOC
+    SOC -->|Case 01| CLOSE["Authorized TP<br/>SOC Closure"]
+    SOC -->|Case 02| IR[Incident Response]
+    IR --> CORR["DNS + Nginx + VPC Flow<br/>+ Public Exposure Review"]
+    CORR --> DEC["Preserve + Monitor<br/>No Active Containment"]
+```
+
+> The scenario uses the shared DNSentinel infrastructure but keeps the project view focused on the actual attack → detection → investigation → response path.
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%" alt="section divider" />
+
+## 🔄 SOC Lifecycle & Implementation Reality
+
+| Stage | State |
+|---|---|
+| **Simulate** | ✅ |
+| **Observe** | ✅ |
+| **Detect** | ✅ |
+| **AI Assist** | ✅ |
+| **SOC Investigate** | ✅ |
+| **IR Decide** | ✅ |
+| **Verify** | ✅ |
+| **Document** | ✅ |
+
+> [!IMPORTANT]
+> ✅ means supported by implemented project evidence. 🟡 means design/infrastructure/documentation exists but the scenario stage is not complete. ⚪ means planned and is **not presented as implemented**.
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%" alt="section divider" />
+
+## 🖼️ Evidence Highlights
+
+<table>
+<tr>
+<td width="50%"><img src="screenshots/detection-engineering/04-dns-investigation-dashboard.png" alt="Splunk investigation dashboard"><br/><sub><b>Detection Engineering:</b> final investigation dashboard.</sub></td>
+<td width="50%"><img src="screenshots/soc/case-01/Case-01_E01_Production-Detection-Triggered.png" alt="Case 01 detection"><br/><sub><b>Case 01:</b> real alert, authorized activity.</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="screenshots/soc/case-02/Case-02_E03_Activity-Timeline.png" alt="Case 02 timeline"><br/><sub><b>Case 02:</b> staged DNS reconnaissance timeline.</sub></td>
+<td width="50%"><img src="screenshots/ir/case-02/IR-E05b_VPC-Flow-Client-Correlation.png" alt="IR network correlation"><br/><sub><b>IR:</b> network correlation without over-attribution.</sub></td>
+</tr>
+</table>
+
+Full role- and case-organized evidence is available in [`screenshots/`](screenshots/) and [`evidence/`](evidence/).
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%" alt="section divider" />
+
+## 📋 Scenario at a Glance
 
 Scenario 01 tests whether public-authoritative DNS reconnaissance can be detected and investigated without assuming that every unusual DNS pattern is malicious.
 
@@ -31,7 +118,7 @@ Scenario 01 tests whether public-authoritative DNS reconnaissance can be detecte
 | **Detection Engineer** | [Sonia](https://github.com/sonia11mansha415) | Built the baseline, dashboard, hunting SPL, detection v1.0, scheduled alert and Scenario 01 AI evidence path |
 | **Incident Responder / Defender** | [Lubaba](https://github.com/lubaba1513-pixel) | Independently validated Case 02, scoped DNS/Web/VPC evidence, reviewed public exposure and selected the final response |
 
-## Final outcomes
+## 🧾 Final Outcomes
 
 | Case | Detection result | Human conclusion | Final action |
 |---|---|---|---|
@@ -43,7 +130,7 @@ Scenario 01 tests whether public-authoritative DNS reconnaissance can be detecte
 
 ---
 
-## How the exercise unfolded
+## 🔄 How the Exercise Unfolded
 
 ```mermaid
 flowchart LR
@@ -65,7 +152,7 @@ The exercise was deliberately **information-separated**. Attacker timing, comman
 
 ---
 
-## Detection Engineering foundation
+## 🛠️ Detection Engineering Foundation
 
 Before the operational exercise began, Sonia built and validated the analyst-facing detection path:
 
@@ -100,7 +187,7 @@ Read the full engineering story in [`detection-engineering/DETECTION-ENGINEERING
 
 ---
 
-## Case 01 — the alert was real, but the activity was authorized
+## 🟢 Case 01 — The Alert Was Real, but the Activity Was Authorized
 
 Case 01 came from the defender-owned `dns-soc-web01` asset. A post-change DNS validation sequence generated a concentrated authoritative-DNS pattern that genuinely crossed Detection v1.0.
 
@@ -118,7 +205,7 @@ Deep case record: [`soc/case-01-soc-investigation-closure.md`](soc/case-01-soc-i
 
 ---
 
-## Case 02 — external DNS reconnaissance
+## 🟠 Case 02 — External DNS Reconnaissance
 
 The external adversary operated from a separate AWS account and used public DNS only. The activity progressed from authority/zone inspection into service-name and record-type enumeration.
 
@@ -146,7 +233,7 @@ Deep case record: [`soc/case-02-soc-investigation-ir-handoff.md`](soc/case-02-so
 
 ---
 
-## Incident Response — confirm the behavior, do not over-attribute it
+## 🛡️ Incident Response — Confirm the Behavior, Do Not Over-Attribute It
 
 Lubaba did not simply accept the SOC conclusion. IR independently reproduced the core counts, validated the seven-day baseline, expanded the DNS timeline, correlated Nginx and VPC Flow evidence, compared peer DNS sources, and reviewed the Route 53 public hosted-zone records.
 
@@ -166,7 +253,7 @@ Read [`ir/INCIDENT-RESPONSE.md`](ir/INCIDENT-RESPONSE.md) and [`ir/case-02-valid
 
 ---
 
-## AI was assistance, not authority
+## 🤖 AI Was Assistance, Not Authority
 
 The Scenario 01 AI path returned a structured result into `index=dns_soc_ai`, including summary, confidence, observed indicators, MITRE suggestions, missing evidence and response considerations.
 
@@ -186,7 +273,7 @@ That pattern matters most in Case 02: the AI correctly suggested DNS reconnaissa
 
 ---
 
-## Network and protocol view
+## 🌐 Network and Protocol View
 
 | Layer / view | Scenario 01 evidence |
 |---|---|
@@ -199,7 +286,7 @@ That pattern matters most in Case 02: the AI correctly suggested DNS reconnaissa
 
 ---
 
-## Repository map
+## 🗂️ Repository Navigation
 
 | Area | Purpose |
 |---|---|
@@ -217,7 +304,7 @@ That pattern matters most in Case 02: the AI correctly suggested DNS reconnaissa
 
 ---
 
-## Scenario completion record
+## ✅ Scenario Completion Record
 
 | Gate | Status |
 |---|---|
@@ -234,3 +321,45 @@ That pattern matters most in Case 02: the AI correctly suggested DNS reconnaissa
 
 > [!NOTE]
 > Scenario 01 demonstrates that a mature security decision is not always “block something.” Detection, attribution, business context and response proportionality all mattered to the final outcome.
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%" alt="section divider" />
+
+## 🧠 Security Engineering Skills Demonstrated
+
+| Skill area | Scenario evidence / design focus |
+|---|---|
+| **DNS Analysis** | Authoritative query names/types, response patterns, NXDOMAIN and resolver/source semantics |
+| **Detection Engineering** | Baseline, hunting SPL, detection v1.0, validation, scheduled alert and dashboard |
+| **SOC Investigation** | Source attribution, 5W1H, timeline, peer comparison and disposition |
+| **Incident Response** | Independent validation, cross-telemetry scope and proportional response |
+| **Network Correlation** | Nginx + VPC Flow + AWS asset context |
+| **AI-Assisted SOC** | Structured AI output checked against raw evidence |
+
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%" alt="section divider" />
+
+## 📚 Documentation Model
+
+This scenario repository is a **case/execution layer** built on the shared [DNS Lab Infrastructure](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure). It intentionally separates:
+
+- **Design / prerequisites** — what must exist before the exercise;
+- **Simulation / ground truth** — what the authorized operator actually generated;
+- **Detection Engineering** — baseline, hunting, tuned detection and validation;
+- **SOC investigation** — defender-visible evidence and human disposition;
+- **IR / containment** — independently justified response and verification;
+- **Evidence** — screenshots and structured artifacts that prove the final claims.
+
+> [!NOTE]
+> Planned work stays labelled as planned. This repository does not create fake screenshots, fake SPL results, fake ML metrics or fake incident outcomes to make a scenario look complete.
+
+<div align="center">
+
+### DNSentinel Lab
+**Build the telemetry. Prove the detection. Investigate the evidence. Verify the response.**
+
+[🏗️ Infrastructure](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure) · [**🔎 Scenario 01**](https://github.com/DNSentinel-Lab/Scenario-01-DNS-Recon) · [🧬 Scenario 02](https://github.com/DNSentinel-Lab/Scenario-02-DGA) · [🔄 Scenario 03](https://github.com/DNSentinel-Lab/Scenario-03-Fast-Flux) · [🛰️ Scenario 04](https://github.com/DNSentinel-Lab/Scenario-04-DNS-Tunneling)
+
+[⬆ Back to top](#top)
+
+</div>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,12,20,24&height=120&section=footer" width="100%" alt="footer" />

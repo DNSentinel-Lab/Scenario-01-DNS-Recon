@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Ir](README.md) › **Case 02 Final IR Decision**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Case 02 Final IR Decision
 
 **Responder:** Lubaba  
@@ -62,3 +71,13 @@ Confirmed DNS reconnaissance behavior
 ```
 
 This decision is part of the Scenario 01 result—not a missing containment step.
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Ir](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

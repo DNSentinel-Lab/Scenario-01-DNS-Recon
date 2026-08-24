@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › **Detection Engineering Validation Record — Scenario 01**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Detection Engineering Validation Record — Scenario 01
 
 **Detection Engineer:** [Sonia](https://github.com/sonia11mansha415)  
@@ -151,3 +160,13 @@ This decision covers the detection-engineering lifecycle only. It does not mark 
 After these engineering gates passed, Detection v1.0 was frozen and used unchanged for the completed Scenario 01 exercise. Case 01 produced an Authorized / Benign True Positive after SOC asset/business-context validation. Case 02 produced a suspicious DNS-reconnaissance handoff that IR independently validated before choosing Preserve + Monitor / No Active Containment.
 
 See [`../SCENARIO-01-EXECUTION.md`](../SCENARIO-01-EXECUTION.md).
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [🏗️ Infrastructure](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Ir](README.md) › **Case 02 IR Validation / Acceptance Matrix**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Case 02 IR Validation / Acceptance Matrix
 
 **Incident Responder:** Lubaba  
@@ -93,3 +102,13 @@ Route 53 query logs established which lookups succeeded, but not every returned 
 IR accepted the SOC escalation as evidence-backed **DNS reconnaissance**, but did not accept stronger claims of endpoint attribution, malicious web progression or compromise.
 
 **Final response:** **PRESERVE + MONITOR ONLY — NO ACTIVE CONTAINMENT**.
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Ir](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

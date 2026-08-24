@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Exercise](README.md) › **Scenario 01 Realistic Exercise Protocol**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 Realistic Exercise Protocol
 
 **Status:** ✅ Used for the completed Scenario 01 execution
@@ -92,3 +101,13 @@ Scenario 01 is reconnaissance only. It does not include exploitation, credential
 - Case 01 → Authorized / Benign True Positive → SOC closure.
 - Case 02 → Suspicious / Likely Unauthorized DNS Reconnaissance → IR.
 - IR → confirmed reconnaissance, no proven progression → Preserve + Monitor / No Active Containment.
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Exercise](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › **Scenario 01 Detection Engineering — From Raw DNS Telemetry to Analyst-Ready Alerting**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 Detection Engineering — From Raw DNS Telemetry to Analyst-Ready Alerting
 
 **Detection Engineer:** [Sonia](https://github.com/sonia11mansha415)  
@@ -739,3 +748,13 @@ Detection Engineering complete
 The operational exercise did not require a post-event threshold change. The strongest carry-forward lesson remained the same: preserve source semantics, validate behavior with raw evidence, and let human context determine authorization and response.
 
 Continue with [`../SCENARIO-01-EXECUTION.md`](../SCENARIO-01-EXECUTION.md).
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [🏗️ Infrastructure](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

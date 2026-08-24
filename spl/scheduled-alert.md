@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Spl](README.md) › **Scheduled Alert — Scenario 01 Possible DNS Reconnaissance**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scheduled Alert — Scenario 01 Possible DNS Reconnaissance
 
 **Status:** **✅ Implemented and validated**  
@@ -74,3 +83,13 @@ The alert summary is never the only evidence. The raw Route 53 pivot in [`huntin
 ## AI action boundary
 
 The Webhook forwards the structured alert to the shared AI bridge. The LLM does not determine whether the detection fires; it receives the already-fired alert and returns analyst assistance.
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Spl](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

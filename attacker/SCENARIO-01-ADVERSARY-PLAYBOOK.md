@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Attacker](README.md) › **Scenario 01 Adversary Playbook — DNS Reconnaissance & Enumeration**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 Adversary Playbook — DNS Reconnaissance & Enumeration
 
 **Operator:** [Abdul-Rehman](https://github.com/abdul4rehman215)  
@@ -215,3 +224,13 @@ zone authority
 ```
 
 Success does **not** require compromise. Scenario 01 ends at reconnaissance.
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Attacker](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>
