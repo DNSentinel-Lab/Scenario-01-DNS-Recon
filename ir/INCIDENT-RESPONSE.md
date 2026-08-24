@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Ir](README.md) › **Incident Response — Scenario 01 Case 02**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Incident Response — Scenario 01 Case 02
 
 **Incident Responder / Defender:** [Lubaba](https://github.com/lubaba1513-pixel)  
@@ -220,3 +229,13 @@ Lubaba validated the SOC Analyst facts, expanded the scope, checked the network 
 - [`case-02-final-decision.md`](case-02-final-decision.md) — final response decision
 - [`../soc/case-02-soc-investigation-ir-handoff.md`](../soc/case-02-soc-investigation-ir-handoff.md) — source SOC handoff
 - [`../exercise/final-comparison.md`](../exercise/final-comparison.md) — final cross-role comparison
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Ir](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>
