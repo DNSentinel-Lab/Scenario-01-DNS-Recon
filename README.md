@@ -92,7 +92,7 @@ distinct_query_types >= 3
 
 `NXDOMAIN` remains useful evidence context; it is not a mandatory detection condition.
 
-![Scenario 01 investigation dashboard](screenshots/detection-engineering/04-dns-investigation-dashboard.png)
+![Scenario 01 investigation dashboard](../screenshots/detection-engineering/04-dns-investigation-dashboard.png)
 
 *The final Splunk Dashboard Studio view connects high-level DNS behavior with source-aware pivots and raw events.*
 
