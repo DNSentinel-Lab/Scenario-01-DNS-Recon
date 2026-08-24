@@ -1,6 +1,7 @@
 # Scenario 01 SOC Analyst Playbook — DNS Reconnaissance & Enumeration
 
-**Analyst:** Musfira  
+**Analyst:** [Musfira](https://github.com/MUSFIRA-ZAFAR)  
+**Status:** ✅ Workflow used for the completed Scenario 01 SOC investigations  
 **Role:** SOC Analyst / Threat Hunter  
 **Primary MITRE ATT&CK:** `T1590.002 — Gather Victim Network Information: DNS`  
 **Cyber Kill Chain:** Reconnaissance  
@@ -24,7 +25,7 @@ The analyst does **not** know:
 - what commands were run;
 - which names will be queried.
 
-Treat the shift like a real SOC queue.
+Treat the queue like a real SOC investigation: do not use attacker-side ground truth to reach the conclusion.
 
 ---
 

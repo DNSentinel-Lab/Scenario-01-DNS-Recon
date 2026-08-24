@@ -1,51 +1,62 @@
-# Screenshot Evidence — Scenario 01 DNS Reconnaissance & Enumeration
+# Screenshot Evidence — Scenario 01
 
-**Detection Engineering set:** **✅ Curated**
+**Status:** ✅ Curated and organized by role/case
 
-## Detection Engineering evidence
+The repository keeps detailed evidence available while the flagship Markdown stories display only the screenshots that move the investigation forward.
 
-| # | File | What it proves |
-|---:|---|---|
-| 01 | [`detection-engineering/01-route53-field-mapping.png`](detection-engineering/01-route53-field-mapping.png) | Real Route 53 authoritative fields were mapped before detection logic |
-| 02 | [`detection-engineering/02-route53-ingestion-latency.png`](detection-engineering/02-route53-ingestion-latency.png) | Current delivery was separated from older backlog outliers |
-| 03 | [`detection-engineering/03-baseline-validation.png`](detection-engineering/03-baseline-validation.png) | Normal source/window ranges used for threshold reasoning |
-| 04 | [`detection-engineering/04-dns-investigation-dashboard.png`](detection-engineering/04-dns-investigation-dashboard.png) | Final interactive Splunk Dashboard Studio investigation surface |
-| 05 | [`detection-engineering/05-hunting-source-window-behavior.png`](detection-engineering/05-hunting-source-window-behavior.png) | Threshold-free behavioral hunt works |
-| 06 | [`detection-engineering/06a-controlled-positive-test-traffic.png`](detection-engineering/06a-controlled-positive-test-traffic.png) | Authorized controlled positive test traffic was generated |
-| 07 | [`detection-engineering/06-controlled-positive-detection.png`](detection-engineering/06-controlled-positive-detection.png) | Positive recon-like source/window crossed the detection boundary |
-| 08 | [`detection-engineering/07-benign-no-detection.png`](detection-engineering/07-benign-no-detection.png) | Basic benign DNS activity did not trigger the same rule |
-| 09 | [`detection-engineering/08-final-detection-v1-validation.png`](detection-engineering/08-final-detection-v1-validation.png) | Final v1.0 evidence row contains the analyst fields |
-| 10 | [`detection-engineering/09-scheduled-alert-triggered.png`](detection-engineering/09-scheduled-alert-triggered.png) | Scheduled alert fired automatically |
-| 11 | [`detection-engineering/10-raw-event-drilldown.png`](detection-engineering/10-raw-event-drilldown.png) | Analyst can pivot back to exact Route 53 events |
-| 12 | [`detection-engineering/11-ai-alert-evidence-contract.png`](detection-engineering/11-ai-alert-evidence-contract.png) | Alert result contains bridge-compatible structured fields |
-| 13 | [`detection-engineering/12-ai-triage-indexed.png`](detection-engineering/12-ai-triage-indexed.png) | Structured AI result was indexed back into Splunk |
+## Detection Engineering
 
-## Troubleshooting appendix
+Folder: [`detection-engineering/`](detection-engineering/)
 
-| File | What it captures |
+Contains field mapping, ingestion timing, baseline, dashboard, hunting, validation, scheduled alert, raw drilldown and AI evidence-path screenshots.
+
+## Project Lead / Adversary
+
+### Case 01
+
+| File | Purpose |
 |---|---|
-| [`troubleshooting/t01-kinesis-kvstore-failure.png`](troubleshooting/t01-kinesis-kvstore-failure.png) | Kinesis checkpoint failure tied to KV Store initialization rather than the detection rule |
-| [`troubleshooting/t02-compatible-kernel-recovery.png`](troubleshooting/t02-compatible-kernel-recovery.png) | Reversible kernel fallback / service recovery evidence |
-| [`troubleshooting/t03-webhook-schema-failure.png`](troubleshooting/t03-webhook-schema-failure.png) | HTTP 400 schema failure that led to the final alert evidence contract |
+| [`attacker/case-01/01-authorized-dns-validation-batch.png`](attacker/case-01/01-authorized-dns-validation-batch.png) | Final authoritative 4-name × 4-type authorized validation sequence |
+| [`attacker/case-01/02-authorized-activity-alert-trigger.png`](attacker/case-01/02-authorized-activity-alert-trigger.png) | Alert trigger history after the authorized activity |
 
+### Case 02
 
-## Official blind-exercise screenshots — add only after execution
+| File | Purpose |
+|---|---|
+| [`attacker/case-02/01-authority-and-zone-baseline.png`](attacker/case-02/01-authority-and-zone-baseline.png) | NS / SOA authority discovery |
+| [`attacker/case-02/02-service-name-a-enumeration.png`](attacker/case-02/02-service-name-a-enumeration.png) | Service-style A-record enumeration |
+| [`attacker/case-02/03-service-name-txt-enumeration.png`](attacker/case-02/03-service-name-txt-enumeration.png) | TXT / authority information checks |
+| [`attacker/case-02/04-multitype-recon-command.png`](attacker/case-02/04-multitype-recon-command.png) | Additional multi-type recon command pattern |
 
-Recommended evidence order:
+## SOC Analyst
 
-```text
-20-alert-trigger.png
-21-soc-dashboard-window.png
-22-route53-raw-evidence.png
-23-source-history.png
-24-ai-triage-human-validation.png
-25-soc-disposition.png
-26-ir-handoff.png
-27-ir-response-verification.png       # only if a response is approved
-28-attacker-ground-truth-reveal.png   # publish only after defender record is locked
-29-final-comparison.png
-```
+### Case 01
 
-The attacker-side ground-truth screenshot must **not** be shared with the SOC Analyst during the live investigation.
+Folder: [`soc/case-01/`](soc/case-01/)
 
-Keep the final set small: one screenshot should prove one important fact or decision.
+E01–E10 cover detection, raw DNS, timeline, baseline, cross-telemetry, cloud/asset attribution, AI validation and authorization closure.
+
+### Case 02
+
+Folder: [`soc/case-02/`](soc/case-02/)
+
+E01–E10 cover detection, raw DNS, staged timing, name breadth, response distribution, seven-day history, cross-telemetry, AI validation, unresolved ownership and IR escalation.
+
+## Incident Response — Case 02
+
+Folder: [`ir/case-02/`](ir/case-02/)
+
+The set preserves:
+
+- independent SOC-fact validation;
+- seven-day baseline;
+- custom extended DNS timeline;
+- Nginx initial/raw/parsed/wider-scope views;
+- VPC Flow raw parsing and client correlation;
+- peer DNS source comparison;
+- public-DNS success views;
+- Route 53 hosted-zone record review.
+
+## Screenshot rule
+
+One screenshot should prove one important fact, decision or reusable lesson. Construction/progress screenshots and repetitive failed searches are not part of the final Scenario 01 story.

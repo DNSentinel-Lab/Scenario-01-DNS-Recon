@@ -1,203 +1,153 @@
 # Scenario 01 Runbook — DNS Reconnaissance & Enumeration
 
-**Overall scenario status:** Official blind SOC/IR exercise pending  
-**Detection Engineering status:** **✅ Complete / Detection Engineering Ready**  
+**Status:** ✅ Complete  
 **Primary MITRE ATT&CK:** `T1590.002 — Gather Victim Network Information: DNS`  
 **Cyber Kill Chain:** Reconnaissance  
-**Project Lead / Adversary Operator:** Abdul-Rehman  
-**SOC Analyst / Threat Hunter:** Musfira  
-**Detection Engineer:** Sonia  
-**IR / Defender:** Lubaba
+**Target namespace:** `soclab.abdul4rehman215.tech`
 
-This runbook separates two things that must not be mixed:
+This runbook is the final reproducible record for Scenario 01. It follows the shared 20-part scenario documentation standard and reflects the exercise as executed—not the original planning state.
 
-1. **Detection Engineering validation** — already complete.
-2. **Official blind adversary-vs-defender exercise** — pending execution.
+## Completion matrix
 
-> [!IMPORTANT]
-> The official attacker operates from a separate AWS account, with optional external Windows traffic. The SOC Analyst is not told the attack start time, source IP, commands or queried names. Ground truth is revealed only after the SOC disposition is locked.
-
-## Status summary
-
-| # | Area | Current status |
+| # | Area | Final state |
 |---:|---|---|
-| 1 | Objective | ✅ Defined |
-| 2 | Architecture | ✅ Blind external-adversary model defined |
-| 3 | Prerequisites | ✅ Engineering gates passed; live health check pending |
-| 4 | Adversary Exercise | ⏳ Playbook ready; official run pending |
+| 1 | Objective | ✅ Complete |
+| 2 | Architecture | ✅ Complete |
+| 3 | Prerequisites | ✅ Complete |
+| 4 | Adversary / controlled activity | ✅ Complete |
 | 5 | Telemetry | ✅ Validated |
-| 6 | Detection | ✅ Complete |
-| 7 | SPL / Detection Logic | ✅ Complete |
-| 8 | Alert | ✅ Complete and validated |
-| 9 | AI Triage | ✅ Engineering integration validated; live human comparison pending |
-| 10 | SOC Analysis | 🟡 Playbook ready; official blind investigation pending |
-| 11 | Incident Response | 🟡 Handoff boundary ready; official response pending |
-| 12 | Evidence | ✅ Engineering evidence complete; live evidence pending |
-| 13 | Containment | ⏳ Pending SOC/IR decision |
-| 14 | Verification | ⏳ Pending approved response |
-| 15 | Results | 🟡 Detection Engineering complete; final scenario result pending |
-| 16 | MITRE ATT&CK Mapping | ✅ `T1590.002` |
-| 17 | False Positives / Disposition | ✅ Decision model defined; live result pending |
-| 18 | Lessons Learned | ✅ Detection Engineering lessons documented |
-| 19 | Reproduction / Execution | ✅ Engineering + blind exercise paths documented |
-| 20 | Screenshots / Evidence | ✅ Engineering set complete; live set pending |
+| 6 | Detection | ✅ Detection v1.0 complete |
+| 7 | SPL | ✅ Complete |
+| 8 | Alert | ✅ Validated |
+| 9 | AI Triage | ✅ Validated and human-reviewed |
+| 10 | SOC Analysis | ✅ Case 01 + Case 02 complete |
+| 11 | Incident Response | ✅ Case 02 complete |
+| 12 | Evidence | ✅ Complete |
+| 13 | Containment | ✅ Response decision complete — no active containment |
+| 14 | Verification | ✅ Evidence-backed closure complete |
+| 15 | Results | ✅ Complete |
+| 16 | MITRE mapping | ✅ `T1590.002` |
+| 17 | False positives / benign context | ✅ Authorized TP demonstrated |
+| 18 | Lessons learned | ✅ Complete |
+| 19 | Reproduction | ✅ Documented |
+| 20 | Screenshots | ✅ Curated |
 
 ---
 
 ## 1. Objective
 
-Scenario 01 tests whether an external actor can enumerate the public DNS namespace and whether the defender can independently detect, investigate and explain that behavior.
+Test whether public-authoritative DNS reconnaissance against `soclab.abdul4rehman215.tech` can be:
 
-The official exercise must answer two different questions:
+1. observed in real Route 53 telemetry;
+2. separated from normal/background activity by an evidence-based detection;
+3. investigated by a SOC Analyst without attacker ground truth;
+4. validated and scoped by Incident Response;
+5. closed with a proportionate response.
 
-```text
-Adversary question:
-What can I learn from public DNS?
-
-Defender question:
-Can I prove what happened from telemetry without being told the answer?
-```
-
-**Status:** ✅ Defined.
+The scenario intentionally includes both a legitimate recon-like case and suspicious external reconnaissance so the analyst must distinguish **behavior** from **authorization**.
 
 ---
 
 ## 2. Architecture
 
-### Official blind exercise path
-
-```text
-EXTERNAL ADVERSARY SIDE                         DEFENDER / SOC SIDE
-
-Separate AWS account                           Defender AWS account
-Kali attacker                                  Route 53 child zone
-        \                                       dns-soc-web01
-         \ public Internet                      dns-soc-splunk01
-          +------ DNS / optional HTTPS --------> Splunk + AI bridge
-                                                     |
-                                                     v
-                                                SOC Analyst
-                                                     |
-                                                     v
-                                                  IR / Defender
-
-Optional external Windows source
-        +------ public Internet --------------------+
+```mermaid
+flowchart LR
+    K["External Kali<br/>separate AWS account"] -->|Public DNS| R["Route 53 public hosted zone"]
+    W["dns-soc-web01<br/>10.50.10.10"] -->|Authorized DNS validation| R
+    R --> CW[Route 53 query logs]
+    CW --> KIN[Kinesis]
+    KIN --> SPL[Splunk Enterprise]
+    SPL --> DET[Detection v1.0]
+    DET --> SOC[SOC Analyst]
+    DET --> AI[AI bridge / OpenAI / HEC]
+    AI --> SOC
+    WEB[Public Nginx Web target] --> SPL
+    FLOW[VPC Flow Logs] --> SPL
+    SOC -->|Case 02 handoff| IR[Incident Response]
 ```
 
-There is:
+Important trust boundary:
 
-- no VPC peering;
-- no private attacker-to-SOC route;
-- no defender-side asset inventory identifying the official attacker;
-- no attacker ground truth sent into the AI prompt.
-
-The official adversary environment is outside the defender AWS account. Historical in-account attacker infrastructure used during early lab engineering is not the official blind-exercise source.
-
-**Status:** ✅ Locked.
+- the external adversary was outside the defender AWS account;
+- no private attacker-to-defender route was used;
+- attacker-side telemetry was not required for SOC/IR decisions;
+- `observed_dns_source` remained resolver/source evidence rather than guaranteed endpoint identity.
 
 ---
 
 ## 3. Prerequisites
 
-### Defender health gate
+Before execution:
 
-Before the live window, Sonia reconfirms:
+- Route 53 public hosted zone delegated and healthy;
+- `dns-soc-web01` public Web target operational;
+- `index=dns_soc_aws` receiving Route 53 Kinesis telemetry;
+- Nginx telemetry available in `index=dns_soc_web`;
+- VPC Flow telemetry available in `index=dns_soc_aws`;
+- Splunk dashboard and Detection v1.0 validated;
+- scheduled alert enabled;
+- Scenario 01 AI evidence path validated;
+- UTC clocks synchronized;
+- Project Lead ground-truth capture prepared.
 
-- current Route 53 events in `index=dns_soc_aws`;
-- `sourcetype="aws:kinesis"` is current;
-- Kinesis collection is healthy;
-- Detection v1.0 is enabled;
-- scheduled alert is enabled;
-- dashboard loads;
-- AI bridge health is green;
-- `dns_soc_ai` can receive returned triage events.
-
-Then **freeze Detection v1.0**. No threshold changes during the official run.
-
-### SOC readiness gate
-
-Musfira prepares:
-
-- Alerts page;
-- Scenario 01 dashboard;
-- raw Route 53 search;
-- SOC investigation template;
-- AI triage search.
-
-She is not told the attacker start time.
-
-### Adversary readiness gate
-
-Abdul-Rehman privately confirms:
-
-- separate-account Kali host is reachable;
-- public Internet/DNS works;
-- current public source IP is recorded;
-- UTC time is correct;
-- the ground-truth template is ready.
-
-**Status:** ✅ Design ready / live reconfirmation pending.
+Detection Engineering was frozen before the official cases were executed.
 
 ---
 
-## 4. Adversary Exercise
+## 4. Adversary / controlled activity
 
-### Threat objective
+### Case 01 — authorized operational validation
 
-The adversary knows a public project domain and attempts to discover:
+Source: defender-owned `dns-soc-web01`.
 
-- authoritative nameservers;
-- SOA/zone metadata;
-- A/AAAA exposure;
-- mail records;
-- TXT metadata;
-- likely public subdomains;
-- whether a zone transfer is exposed;
-- an optional public web endpoint discovered through DNS.
+Business purpose: post-change DNS validation.
 
-This behavior maps to:
-
-**`T1590.002 — Gather Victim Network Information: DNS`**
-
-and the **Reconnaissance** stage of the Cyber Kill Chain.
-
-### Official attacker-side procedure
-
-The full command sequence is in:
-
-[`attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md`](attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md)
-
-The attacker deliberately does **not** tune activity to Sonia's detection threshold.
-
-Example activity includes:
+Final concentrated activity:
 
 ```text
-NS / SOA lookup
-→ direct authoritative A / AAAA / MX / NS / TXT queries
-→ small likely-subdomain enumeration
-→ AXFR check
-→ optional non-destructive HTTPS follow-up
+4 names
+× 4 DNS types
+= 16 authoritative DNS queries
+
+A / AAAA / CNAME / TXT
 ```
 
-Actual start time, public IP and commands remain private until the reveal gate.
+This case was designed to be legitimately useful activity that could still look like reconnaissance to a behavior-based detection.
 
-**Status:** ⏳ Official run pending.
+### Case 02 — external DNS reconnaissance
+
+Source environment: Kali EC2 in a separate AWS account/network.
+
+Adversary sequence:
+
+```text
+authority discovery
+→ NS / SOA review
+→ base-domain record interrogation
+→ service/environment name enumeration
+→ A / TXT / multi-type checks
+→ safe AXFR posture check
+```
+
+The external activity remained within reconnaissance scope. No exploitation or destructive action was required.
+
+See [`attacker/PROJECT-LEAD-ADVERSARY.md`](attacker/PROJECT-LEAD-ADVERSARY.md).
 
 ---
 
 ## 5. Telemetry
 
-### Primary evidence source
+### Primary DNS evidence
 
 ```text
 index=dns_soc_aws
 sourcetype=aws:kinesis
 ```
 
-Validated Route 53 authoritative fields:
+Important Route 53 fields:
 
 ```text
+_time
 query_name
 query_type
 response_code
@@ -207,440 +157,351 @@ observed_dns_source
 edns_client_subnet
 ```
 
-`observed_dns_source` is intentionally neutral. It is the source/resolver address seen by Route 53, not automatic proof of the original endpoint or human attacker.
+### Supporting Web evidence
 
-### Supporting evidence
+```text
+index=dns_soc_web
+sourcetype=dns_soc:nginx:access
+```
 
-| Source | Scenario 01 use |
-|---|---|
-| Nginx access logs | Optional public-web follow-up |
-| VPC Flow Logs | Network follow-up to the Web EC2 |
-| CloudTrail | Defender/cloud configuration context if relevant |
-| Resolver Query Logs | Not a primary official Scenario 01 source; more important from Scenario 02 onward |
-| `dns_soc_ai` | AI-assisted context; never the primary evidence |
+### Supporting network evidence
 
-### Network / protocol interpretation
+```text
+index=dns_soc_aws
+sourcetype=aws:cloudwatchlogs:vpcflow
+```
 
-| Layer/view | Scenario 01 evidence |
-|---|---|
-| Layer 7 | DNS names, record types and responses at Route 53 authority |
-| Layer 4 | UDP/TCP 53; optional HTTP/HTTPS follow-up on 80/443 |
-| Layer 3 | source/destination IP context from target-side logs where available |
-| Application | Nginx request details for optional public-Web follow-up |
+### Cloud / asset context
 
-**Status:** ✅ Validated.
+CloudTrail/SSM and EC2 inventory were useful for Case 01 ownership attribution. They did not provide ownership for Case 02.
 
 ---
 
 ## 6. Detection
 
-Final behavioral hypothesis:
+Final hypothesis:
 
 ```text
 same observed DNS source
-+ controlled lab namespace
-+ concentrated 1-minute activity
++ controlled public namespace
++ concentrated short-window activity
 + query-name breadth
 + meaningful record-type diversity
-→ possible DNS reconnaissance
+= possible DNS reconnaissance
 ```
 
-Detection v1.0 threshold:
+Final v1.0 condition:
 
 ```text
 query_count >= 16
-unique_names >= 4
-distinct_query_types >= 3
+AND unique_names >= 4
+AND distinct_query_types >= 3
 ```
 
-`NXDOMAIN` remains supporting context, not a required condition.
+`NXDOMAIN` is retained as context and supporting evidence, not a required condition.
 
-The official adversary is not instructed to cross these values. If the real behavior bypasses the rule, that is a valid detection-gap result.
-
-**Status:** ✅ Complete / frozen for live exercise.
+Threshold selection came from the measured baseline and controlled tests. It is not presented as a universal DNS threshold.
 
 ---
 
 ## 7. SPL / Detection Logic
 
-Implemented and tested:
+The scenario preserves four categories:
 
 - [`spl/baseline.spl`](spl/baseline.spl)
 - [`spl/hunting.spl`](spl/hunting.spl)
 - [`spl/detection.spl`](spl/detection.spl)
 - [`spl/validation.spl`](spl/validation.spl)
 
-Thresholds came from measured baseline behavior and controlled positive/benign testing.
+The scheduled-alert configuration is in [`spl/scheduled-alert.md`](spl/scheduled-alert.md).
 
-**Status:** ✅ Complete.
+The SPL uses real Route 53 fields and keeps `observed_dns_source` neutral.
 
 ---
 
 ## 8. Alert
 
+**Name:** `Scenario 01 - Possible DNS Reconnaissance`
+
 ```text
-Name:            Scenario 01 - Possible DNS Reconnaissance
-Schedule:        * * * * *
+Schedule:        every minute
 Lookback:        Last 3 minutes
-Trigger:         Number of Results > 0
+Trigger:         Number of results > 0
 Trigger mode:    Once
 Throttle:        60 seconds
 Severity:        Medium
 Actions:         Triggered Alerts + Webhook
 ```
 
-The alert is a **lead**, not a final incident verdict.
-
-See [`spl/scheduled-alert.md`](spl/scheduled-alert.md).
-
-**Status:** ✅ Complete and validated.
+The result row includes analyst-ready evidence plus stable fields for the shared AI bridge.
 
 ---
 
 ## 9. AI Triage
 
-The final alert sends:
+The LLM is downstream of the detection:
 
 ```text
-alert_id
-alert_name
-scenario
-severity
-event_time
-source
-evidence_json
-```
-
-Engineering validation proved:
-
-```text
-scheduled alert
-→ Splunk native webhook
-→ AI bridge
-→ OpenAI HTTP 200
-→ internal HEC
+Detection v1.0
+→ scheduled alert
+→ Splunk webhook
+→ Scenario 01 evidence contract
+→ shared AI bridge
+→ structured OpenAI result
+→ internal HTTPS HEC
 → index=dns_soc_ai
 ```
 
-The live analyst must validate AI against raw evidence.
+The AI result contains summary, confidence, observed indicators, suspicion reasons, MITRE suggestion, Kill Chain stage, missing evidence and response considerations.
 
-AI may:
+`human_validation_required=true` remains part of the design.
 
-- summarize the behavior;
-- list indicators;
-- suggest suspicion reasons;
-- suggest MITRE/Kill Chain context;
-- identify missing evidence;
-- suggest response considerations.
+Human rule:
 
-AI may **not**:
-
-- prove attacker identity;
-- replace raw logs;
-- decide TP/FP automatically;
-- authorize containment.
-
-`human_validation_required=true` remains mandatory.
-
-**Status:** ✅ Engineering path validated / live comparison pending.
+```text
+AI statement → What raw evidence proves this? → Human decision
+```
 
 ---
 
 ## 10. SOC Analysis
 
-The official analyst workflow is documented in:
+### Case 01
 
-[`soc/SOC-ANALYST-PLAYBOOK.md`](soc/SOC-ANALYST-PLAYBOOK.md)
-
-Musfira works from defender evidence only:
+Observed:
 
 ```text
-Alert
-→ Dashboard
-→ Raw Route 53 events
-→ Historical source behavior
-→ Optional Web/VPC correlation
-→ AI validation
-→ 5W1H investigation
-→ disposition
-→ IR handoff if warranted
+100.49.192.164
+16 queries
+4 names
+4 types
+08:41:55 UTC
 ```
 
-### Blindness rule
+SOC verified the raw events and timeline, then used defender cloud/asset evidence to map the source to `dns-soc-web01` and confirm authorization.
 
-The SOC Analyst does not receive attacker ground truth before the decision.
+**Disposition:** Authorized / Benign True Positive  
+**Confidence:** High  
+**Escalation:** None
 
-### Disposition model
+### Case 02
 
-| Disposition | Meaning |
-|---|---|
-| **TP — suspicious/unauthorized** | Real reconnaissance behavior with no established legitimate explanation |
-| **TP — authorized/benign** | Real reconnaissance behavior, later verified as approved activity |
-| **FP** | Normal/non-recon behavior incorrectly matched the detection |
-| **Inconclusive** | Evidence is insufficient for a safe conclusion |
+Observed:
 
-This separates **detection correctness** from **business/security context**.
+```text
+54.242.155.119  (Route 53-observed source/resolver)
+53 queries
+17 names
+6 types
+44 NXDOMAIN / 9 NOERROR
+10:21:51–10:22:34 UTC
+```
 
-**Status:** 🟡 Playbook ready / official investigation pending.
+SOC reconstructed staged service-name enumeration, confirmed first-seen behavior in the available baseline and found no known defender ownership/authorization correlation.
+
+**Disposition:** True Positive — Suspicious / Likely Unauthorized DNS Reconnaissance  
+**Confidence:** High  
+**Risk:** Medium  
+**Escalation:** Incident Response
+
+See [`soc/SOC-ANALYST-INVESTIGATION.md`](soc/SOC-ANALYST-INVESTIGATION.md).
 
 ---
 
 ## 11. Incident Response
 
-IR receives the SOC evidence package only after Musfira has investigated the alert.
+Lubaba independently validated the Case 02 handoff.
 
-The handoff should contain:
+IR work:
 
-- alert ID;
-- UTC first/last seen;
-- observed source;
-- queried names/types;
-- response/NXDOMAIN context;
-- supporting web/network evidence;
-- MITRE + Kill Chain context;
-- AI-vs-human assessment;
-- SOC disposition and confidence;
-- unknowns requiring IR authority/context.
+```text
+reproduce SOC facts
+→ validate 7-day history
+→ expand DNS timeline
+→ inspect Nginx follow-up
+→ correlate VPC Flow
+→ compare peer DNS sources
+→ review public Route 53 records
+→ decide response
+```
 
-No AI output or Detection Engineering test automatically authorizes containment.
+Findings:
 
-**Status:** 🟡 Handoff model ready / official response pending.
+- DNS reconnaissance confirmed;
+- no continued activity from the same observed DNS source in scoped extended window;
+- one later Nginx `GET /` request existed from a separate web client;
+- VPC Flow corroborated that web connection to `10.50.10.10` on TCP 80/443;
+- no evidence proved that web client was the original endpoint behind the DNS source;
+- no exploit-like Web sequence was established;
+- public DNS records were expected/benign;
+- no evidence justified expanding the case beyond Reconnaissance.
+
+See [`ir/INCIDENT-RESPONSE.md`](ir/INCIDENT-RESPONSE.md).
 
 ---
 
 ## 12. Evidence
 
-### Existing engineering evidence
-
-- [`DETECTION-ENGINEERING.md`](DETECTION-ENGINEERING.md)
-- [`evidence/detection-engineering-validation.md`](evidence/detection-engineering-validation.md)
-- [`screenshots/`](screenshots/)
-
-### Live official exercise evidence to add
+Evidence is organized by role and case:
 
 ```text
-private attacker ground truth
-SOC 5W1H notes
-alert results
-raw Route 53 events
-dashboard evidence
-AI triage + human validation
-IR handoff / action
-post-response verification
-final attacker-vs-defender comparison
+screenshots/
+├── detection-engineering/
+├── attacker/
+│   ├── case-01/
+│   └── case-02/
+├── soc/
+│   ├── case-01/
+│   └── case-02/
+└── ir/
+    └── case-02/
 ```
 
-The completed attacker ground truth must remain private until the SOC disposition is locked.
-
-**Status:** ✅ Engineering evidence complete / live evidence pending.
+Master map: [`evidence/README.md`](evidence/README.md)
 
 ---
 
 ## 13. Containment
 
-Scenario 01 is reconnaissance. A response decision must be proportionate to what was actually observed.
+Case 01 required no containment because it was authorized.
 
-Possible IR decisions may include:
+Case 02 did **not** result in an active block.
 
-- preserve and monitor only;
-- restrict an identified source where technically appropriate;
-- reduce unnecessary public DNS exposure;
-- review public records that reveal unnecessary metadata;
-- apply a network/web control if follow-up behavior justifies it.
+Final IR response:
 
-The exact action is selected by IR after SOC confirmation. It is not pre-scripted into the alert.
+> **PRESERVE + MONITOR ONLY — NO ACTIVE CONTAINMENT**
 
-**Status:** ⏳ Pending live decision.
+Reason:
+
+- Route 53-observed source was resolver/source evidence, not a proven original endpoint;
+- malicious Web progression was not established;
+- public DNS exposure was intentional/limited;
+- an unsupported block could create collateral impact.
+
+The response decision itself is part of the scenario result.
 
 ---
 
 ## 14. Verification
 
-If IR changes anything, verify before/after evidence.
+Because no active control was changed, verification focused on evidence-backed closure rather than a before/after block.
 
-Examples:
+IR verified:
 
-```text
-Did the source stop reaching the affected public service?
-Did unnecessary DNS exposure actually change?
-Did expected legitimate access remain available?
-Did Splunk record the post-response state?
-```
+- the SOC metrics were reproducible;
+- the source history and expanded DNS window;
+- supporting Web/VPC evidence;
+- peer-source behavior;
+- public hosted-zone contents;
+- absence of evidence for progression beyond reconnaissance.
 
-A response without verification is incomplete.
-
-**Status:** ⏳ Pending response.
+No configuration change was needed to prove the incident had been handled correctly.
 
 ---
 
 ## 15. Results
 
-### Detection Engineering
+| Case | Result | Response |
+|---|---|---|
+| Case 01 | Detection correct; activity authorized | SOC closure |
+| Case 02 | Detection correct; suspicious external reconnaissance | IR validation + Preserve/Monitor |
 
-**PASS — complete.**
+The complete scenario passed the intended operating chain:
 
-The platform has a validated baseline, dashboard, hunting SPL, detection v1.0, scheduled alert, raw-event pivot and AI evidence path.
-
-### Official blind exercise
-
-Not yet assigned.
-
-A valid result can be:
-
-- alert + correct SOC disposition;
-- alert + useful tuning lesson;
-- detection miss found through later ground-truth comparison;
-- AI disagreement correctly caught by the analyst;
-- insufficient evidence correctly marked inconclusive.
-
-**Status:** 🟡 Final scenario result pending.
+```text
+Behavior → Telemetry → Detection → Alert → AI → SOC → IR → Response decision
+```
 
 ---
 
 ## 16. MITRE ATT&CK Mapping
 
-Primary mapping:
+Primary technique:
 
-**`T1590.002 — Gather Victim Network Information: DNS`**
+`T1590.002 — Gather Victim Network Information: DNS`
 
-Why:
+Cyber Kill Chain stage:
 
-- nameserver/zone metadata is gathered;
-- DNS records are enumerated;
-- likely public names are tested;
-- mail/TXT/address exposure may be collected;
-- AXFR exposure may be checked.
+`Reconnaissance`
 
-Cyber Kill Chain:
-
-**Reconnaissance**
-
-No additional technique is added simply because an alert or AI model suggests one. Additional mapping requires evidence of additional behavior.
-
-**Status:** ✅ Defined.
+No later technique was added because exploitation, Initial Access, persistence, C2 and impact were not demonstrated.
 
 ---
 
-## 17. False Positives / Disposition
+## 17. False Positives / Benign Patterns
 
-Detection Engineering already proved that record-type diversity alone is too noisy.
+Scenario 01 intentionally demonstrated the difference between:
 
-During the official exercise, the analyst must distinguish four cases:
+**Authorized / Benign True Positive**  
+The detection correctly identified reconnaissance-like behavior, but the activity had an approved purpose.
 
-```text
-real recon + unauthorized context     → TP suspicious
-real recon + proven approved context  → TP behavior / benign context
-normal DNS matched as recon           → FP
-insufficient evidence                 → inconclusive
-```
+**False Positive**  
+The detection would be wrong about the behavior itself.
 
-The analyst must not label something FP merely because attacker intent cannot yet be proven.
-
-**Status:** ✅ Decision model ready / live classification pending.
+Case 01 was the first category, not the second.
 
 ---
 
 ## 18. Lessons Learned
 
-Existing engineering lessons are in [`DETECTION-ENGINEERING.md`](DETECTION-ENGINEERING.md).
+### Detection
 
-The blind-exercise design adds several operational lessons:
+- Baseline before threshold.
+- Record-type diversity alone is too weak.
+- NXDOMAIN is context, not proof.
+- Preserve neutral source semantics.
 
-- defender evidence must stand on its own;
-- attacker ground truth should not contaminate SOC reasoning;
-- detection and business-context decisions are different;
-- negative correlation is not proof when DNS resolver intermediaries exist;
-- AI must be challenged, not accepted;
-- a detection miss is valid evidence and must not be hidden by live tuning.
+### SOC
 
-**Status:** ✅ Prepared for post-exercise update.
+- Investigate ownership and authorization separately from behavior.
+- A detection row is the start of the case, not the disposition.
+- Validate AI claims against raw telemetry.
 
----
+### IR
 
-## 19. Reproduction / Execution Instructions
+- Correlation is not attribution.
+- Raw-field parsing is preferable to assuming telemetry is absent.
+- No active containment can be the correct response when the control target is not established.
 
-### Detection Engineering reproduction
+### Exercise design
 
-```text
-1. Confirm Route 53 events
-2. Map fields
-3. Measure ingestion
-4. Run baseline.spl
-5. Review dashboard
-6. Run hunting.spl
-7. Test detection.spl
-8. Run controlled positive and benign engineering validation
-9. Validate scheduled alert
-10. Validate AI evidence contract
-```
-
-### Official blind exercise
-
-```text
-1. Reconfirm defender platform health
-2. Freeze Detection v1.0
-3. SOC begins monitoring without attack timing
-4. External attacker records source IP/time privately
-5. Attacker performs DNS reconnaissance from separate AWS account
-6. Alert may fire — or may miss
-7. SOC independently investigates
-8. SOC validates AI against raw evidence
-9. SOC locks TP / authorized TP / FP / inconclusive disposition
-10. SOC hands off to IR when warranted
-11. IR decides/executes/verifies any response
-12. Project Lead reveals attacker ground truth
-13. Team compares attacker vs telemetry vs detection vs AI vs SOC vs IR
-14. Detection changes happen only after this comparison
-```
-
-See [`exercise/BLIND-EXERCISE-PROTOCOL.md`](exercise/BLIND-EXERCISE-PROTOCOL.md).
-
-**Status:** ✅ Documented / execution pending.
+- Separate attacker ground truth from defender decisions.
+- Do not tune a frozen detection during live execution.
+- Include at least one legitimate case that crosses the detection boundary.
 
 ---
 
-## 20. Screenshots / Evidence
+## 19. Reproduction Instructions
 
-Current Detection Engineering evidence is indexed in [`screenshots/README.md`](screenshots/README.md).
+1. Validate Route 53, Kinesis, Splunk, Nginx and VPC Flow telemetry.
+2. Confirm Detection v1.0 and scheduled alert are enabled and unchanged.
+3. Confirm the Scenario 01 dashboard and AI path are operational.
+4. Prepare private ground-truth capture.
+5. Run Case 01 authorized DNS validation from the defender-owned source.
+6. Allow SOC to investigate and close the case independently.
+7. Run Case 02 external reconnaissance from the separate-account Kali host.
+8. Allow SOC to investigate and create an IR handoff if evidence supports escalation.
+9. IR independently validates and scopes the case.
+10. Record response decision and final comparison.
 
-The official exercise should add only evidence that proves decisions:
+Detailed role instructions:
 
-- alert trigger;
-- raw DNS events;
-- dashboard source/window;
-- AI output;
-- SOC notes/disposition;
-- IR action/verification;
-- attacker ground-truth proof after reveal.
-
-Do not publish repetitive progress screenshots or attacker ground truth before the reveal gate.
-
-**Status:** ✅ Engineering set complete / live set pending.
+- [`attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md`](attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md)
+- [`soc/SOC-ANALYST-PLAYBOOK.md`](soc/SOC-ANALYST-PLAYBOOK.md)
+- [`exercise/REALISTIC-EXERCISE-PROTOCOL.md`](exercise/REALISTIC-EXERCISE-PROTOCOL.md)
 
 ---
 
-# Official exercise handoff
+## 20. Screenshots
 
-The project is now ready for this realistic operating chain:
+Curated visual evidence is indexed in [`screenshots/README.md`](screenshots/README.md).
 
-```text
-External adversary acts without notifying SOC
-        ↓
-Route 53 records what actually reached authority
-        ↓
-Detection v1.0 raises a lead if the behavior crosses the rule
-        ↓
-AI produces advisory context
-        ↓
-SOC Analyst independently proves/rejects the hypothesis
-        ↓
-SOC locks disposition and confidence
-        ↓
-IR receives the evidence-backed handoff
-        ↓
-Ground truth is revealed afterward
-        ↓
-Team measures detection + AI + analyst accuracy
-```
+The flagship stories intentionally use fewer screenshots than the evidence folders. The evidence folders preserve the deep record; the narrative documents show only the images needed to understand the reasoning.
 
-That separation is the core of the official Scenario 01 exercise.
+---
+
+## Final scenario status
+
+> **Scenario 01 — Complete**
+
+Detection Engineering, adversary execution, SOC investigation, Incident Response validation, response decision, evidence organization and final comparison are all documented.

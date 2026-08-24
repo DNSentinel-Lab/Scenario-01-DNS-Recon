@@ -1,84 +1,37 @@
-# Incident Response Workspace — Scenario 01 DNS Reconnaissance & Enumeration
+# Incident Response Workspace — Scenario 01
 
-**Status:** ⏳ Official blind-exercise IR phase pending  
-**IR / Defender:** Lubaba
+**Incident Responder / Defender:** [Lubaba](https://github.com/lubaba1513-pixel)  
+**Status:** ✅ Case 02 IR complete  
+**Final response:** **Preserve + Monitor — No Active Containment**
 
-Detection Engineering is complete and the SOC investigation workflow is prepared. IR begins only when Musfira sends an evidence-backed handoff or when the scenario reaches an approved response checkpoint.
+Case 01 was closed by SOC as an Authorized / Benign True Positive and did not require Incident Response. Lubaba's Scenario 01 IR work therefore focused on Case 02.
 
-## Role boundary
+## Start here
 
-```text
-Detection alert
-    ↓
-SOC investigation
-    ↓
-SOC disposition + evidence
-    ↓
-IR decision
-    ↓
-approved response
-    ↓
-verification
-```
+- [`INCIDENT-RESPONSE.md`](INCIDENT-RESPONSE.md) — flagship IR story from handoff acceptance through final response.
+- [`case-02-validation.md`](case-02-validation.md) — independent acceptance matrix and evidence gallery.
+- [`case-02-final-decision.md`](case-02-final-decision.md) — final response decision and reasoning.
+- [`../soc/case-02-soc-investigation-ir-handoff.md`](../soc/case-02-soc-investigation-ir-handoff.md) — original SOC handoff.
 
-IR does not receive the attacker's private ground truth before the SOC handoff. This keeps the defender workflow realistic.
-
-## Minimum SOC handoff
-
-IR should receive:
+## IR result at a glance
 
 ```text
-Alert ID
-First / last seen UTC
-Observed DNS source
-Names / query types / frequency
-Response and NXDOMAIN context
-Supporting Nginx/VPC evidence
-MITRE T1590.002
-Cyber Kill Chain: Reconnaissance
-AI-vs-human validation result
-SOC disposition and confidence
-What is still unknown
-Evidence links/screenshots
+SOC suspicious DNS reconnaissance
+    ↓
+IR independently reproduces core facts
+    ↓
+7-day baseline + extended DNS timeline
+    ↓
+Nginx + VPC Flow correlation
+    ↓
+peer-source comparison
+    ↓
+public DNS exposure review
+    ↓
+confirmed reconnaissance / no proven progression
+    ↓
+PRESERVE + MONITOR ONLY
+NO ACTIVE CONTAINMENT
 ```
 
-## Response decision
-
-Scenario 01 is reconnaissance, so containment must be proportionate. Possible responses may include:
-
-- preserve evidence and monitor;
-- investigate/validate ownership of an external source;
-- restrict an identified source where technically justified;
-- reduce unnecessary public DNS metadata/exposure;
-- apply a web/network control if follow-up behavior justifies it.
-
-Do not pre-script a containment action simply because the alert fired.
-
-## Verification requirement
-
-If a control is changed, IR must prove the outcome:
-
-```text
-Before response → suspicious/undesired behavior visible
-Response/change → approved defensive action
-After response  → expected technical change observed
-Business path   → legitimate service still works where required
-```
-
-## AI boundary
-
-AI can suggest response considerations, but it cannot authorize containment. Lubaba must review whether AI suggestions are appropriate to the actual evidence and current scope.
-
-## Final IR record
-
-Document:
-
-- action selected and why;
-- exact UTC time;
-- system/service changed;
-- evidence preserved;
-- post-action verification;
-- final status;
-- any follow-up recommendation.
-
-The actual attacker ground truth is revealed only after the defender decision record has been locked.
+IR did not treat the Route 53-observed DNS source as a confirmed attacker endpoint and did not force a containment action without a defensible target.

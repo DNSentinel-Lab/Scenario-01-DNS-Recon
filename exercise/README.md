@@ -1,8 +1,10 @@
-# Official Exercise Operations — Scenario 01
+# Scenario 01 Exercise Operations
 
-This folder defines how the live Scenario 01 exercise is run without leaking attacker ground truth to the defender.
+**Status:** ✅ Completed
 
-- [`BLIND-EXERCISE-PROTOCOL.md`](BLIND-EXERCISE-PROTOCOL.md) — information separation, execution gates, role boundaries and reveal process.
-- [`final-comparison-template.md`](final-comparison-template.md) — post-exercise attacker/detection/AI/SOC/IR comparison.
+This folder records how Scenario 01 kept attacker/controller knowledge separate from defender decisions and how the final perspectives were compared after the investigations were complete.
 
-The live exercise is intentionally **blind from the SOC perspective**. Detection Engineering is frozen before execution, the attacker operates from outside the defender account, and the Project Lead reveals ground truth only after the SOC disposition is locked.
+- [`REALISTIC-EXERCISE-PROTOCOL.md`](REALISTIC-EXERCISE-PROTOCOL.md) — information separation, role boundaries and execution gates used during the exercise.
+- [`final-comparison.md`](final-comparison.md) — final comparison of adversary reality, Route 53 visibility, Detection v1.0, AI, SOC and IR.
+
+The exercise used real public DNS paths and a separate-account external attacker. The defender conclusions were built from target-side evidence rather than attacker ground truth.

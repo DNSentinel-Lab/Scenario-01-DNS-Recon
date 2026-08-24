@@ -44,3 +44,7 @@ The detection is created and validated from Route 53 evidence before the LLM is 
 - bridge normalization;
 - AI result extraction in Splunk;
 - the end-to-end validation result.
+
+## Operational use in the completed exercise
+
+The same AI path was used during the final Scenario 01 SOC workflow. Musfira compared the structured AI result with raw Route 53 evidence in both cases, and Lubaba treated response considerations as advisory during Case 02 IR. AI helped identify missing evidence but did not determine authorization, endpoint attribution or containment.

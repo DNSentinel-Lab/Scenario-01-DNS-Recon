@@ -1,94 +1,52 @@
 # Evidence — Scenario 01 DNS Reconnaissance & Enumeration
 
-**Detection Engineering evidence:** **✅ Complete**  
-**Official blind exercise evidence:** ⏳ Pending execution
+**Status:** ✅ Complete
 
-This folder preserves structured evidence and decision records. Screenshots are indexed separately in [`../screenshots/README.md`](../screenshots/README.md).
+This folder is the evidence map for the completed Scenario 01 exercise. Visual evidence lives in [`../screenshots/`](../screenshots/); technical case records live beside the role that created them.
 
-## Existing engineering evidence
+## Detection Engineering
 
-[`detection-engineering-validation.md`](detection-engineering-validation.md) records the completed gates:
+- [`../detection-engineering/DETECTION-ENGINEERING.md`](../detection-engineering/DETECTION-ENGINEERING.md)
+- [`../detection-engineering/detection-engineering-validation.md`](../detection-engineering/detection-engineering-validation.md)
+- [`../spl/`](../spl/)
+- [`../screenshots/detection-engineering/`](../screenshots/detection-engineering/)
 
-- Route 53 field mapping;
-- source semantics;
-- ingestion timing;
-- baseline;
-- controlled positive validation;
-- benign validation;
-- detection v1.0;
-- scheduled alert;
-- raw-event drilldown;
-- AI evidence contract;
-- end-to-end AI return to Splunk.
+## Project Lead / Adversary
 
-## Official blind-exercise evidence model
+- [`../attacker/PROJECT-LEAD-ADVERSARY.md`](../attacker/PROJECT-LEAD-ADVERSARY.md)
+- [`../attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md`](../attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md)
+- [`../screenshots/attacker/case-01/`](../screenshots/attacker/case-01/)
+- [`../screenshots/attacker/case-02/`](../screenshots/attacker/case-02/)
 
-The live exercise should produce separate evidence from each role:
+## SOC Analyst
 
-### Adversary — private until reveal
+### Case 01
 
-Use [`../attacker/ground-truth-template.md`](../attacker/ground-truth-template.md).
+- [`../soc/case-01-soc-investigation-closure.md`](../soc/case-01-soc-investigation-closure.md)
+- [`../screenshots/soc/case-01/`](../screenshots/soc/case-01/)
 
-Keep private during the investigation:
+### Case 02
 
-- source public IP(s);
-- UTC start/end;
-- commands;
-- queried names/types;
-- AXFR result;
-- optional web follow-up.
+- [`../soc/case-02-soc-investigation-ir-handoff.md`](../soc/case-02-soc-investigation-ir-handoff.md)
+- [`../screenshots/soc/case-02/`](../screenshots/soc/case-02/)
 
-### SOC Analyst
+## Incident Response
 
-Use [`../soc/investigation-template.md`](../soc/investigation-template.md).
+- [`../ir/INCIDENT-RESPONSE.md`](../ir/INCIDENT-RESPONSE.md)
+- [`../ir/case-02-validation.md`](../ir/case-02-validation.md)
+- [`../ir/case-02-final-decision.md`](../ir/case-02-final-decision.md)
+- [`../screenshots/ir/case-02/`](../screenshots/ir/case-02/)
 
-Preserve:
+## Final comparison
 
-- alert ID/results;
-- dashboard view;
-- raw Route 53 evidence;
-- historical comparison;
-- supporting web/network context;
-- 5W1H notes;
-- AI validation;
-- TP / authorized TP / FP / inconclusive disposition;
-- confidence and handoff time.
+- [`../SCENARIO-01-EXECUTION.md`](../SCENARIO-01-EXECUTION.md)
+- [`../exercise/final-comparison.md`](../exercise/final-comparison.md)
 
-### IR / Defender
-
-Preserve:
-
-- received SOC finding;
-- response decision;
-- evidence preserved;
-- containment/change if approved;
-- before/after verification;
-- final response status.
-
-### Final comparison
-
-After ground-truth reveal, complete:
-
-[`../exercise/final-comparison-template.md`](../exercise/final-comparison-template.md)
-
-This compares:
-
-```text
-attacker ground truth
-vs telemetry visibility
-vs Detection v1.0
-vs AI output
-vs SOC conclusion
-vs IR response
-```
-
-## Evidence rule
+## Evidence discipline
 
 Keep only evidence that proves a fact, a decision or a reusable lesson.
 
-Do not:
-
-- publish actual attacker ground truth before the SOC decision;
-- call `observed_dns_source` a confirmed attacker without evidence;
-- treat AI text as primary evidence;
-- publish repetitive screenshots that do not change the investigation story.
+- Route 53 `observed_dns_source` remains resolver/source evidence, not automatic endpoint attribution.
+- AI output is supporting analyst context, not primary evidence.
+- SOC and IR conclusions should be reproducible from defender telemetry.
+- Screenshots should have readable names, visible time ranges where relevant, and captions explaining what they prove.

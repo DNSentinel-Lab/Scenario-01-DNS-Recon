@@ -1,6 +1,7 @@
 # Scenario 01 Adversary Playbook — DNS Reconnaissance & Enumeration
 
-**Operator:** Abdul-Rehman  
+**Operator:** [Abdul-Rehman](https://github.com/abdul4rehman215)  
+**Status:** ✅ Used for the completed Scenario 01 execution  
 **Perspective:** external adversary  
 **Target namespace:** `soclab.abdul4rehman215.tech`  
 **MITRE ATT&CK:** `T1590.002 — Gather Victim Network Information: DNS`  
@@ -27,7 +28,7 @@ The attacker is **not** trying to satisfy the Splunk threshold. Follow the recon
 
 ## 2. Exercise isolation
 
-Official Scenario 01 attacker sources:
+Scenario 01 attacker sources used by the exercise model:
 
 ```text
 Separate AWS account

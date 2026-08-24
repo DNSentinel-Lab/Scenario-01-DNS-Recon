@@ -1,113 +1,88 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=210&section=header&text=Scenario%2001%20%E2%80%94%20DNS%20Reconnaissance&fontSize=38&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=Detection%20Engineering%20%E2%80%A2%20Splunk%20Enterprise%20%E2%80%A2%20Route%2053%20%E2%80%A2%20AI-Assisted%20Triage&descSize=17&descAlignY=58&descColor=00F5FF" width="100%" alt="Scenario 01 DNS Reconnaissance" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=210&section=header&text=Scenario%2001%20%E2%80%94%20DNS%20Reconnaissance&fontSize=38&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=Realistic%20Adversary%20%E2%80%A2%20Detection%20Engineering%20%E2%80%A2%20SOC%20%E2%80%A2%20Incident%20Response&descSize=17&descAlignY=58&descColor=00F5FF" width="100%" alt="Scenario 01 DNS Reconnaissance" />
 
 <div align="center">
 
-![Detection Engineering](https://img.shields.io/badge/Detection_Engineering-Complete-2EA44F?style=for-the-badge)
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=for-the-badge)
+![Detection](https://img.shields.io/badge/Detection-v1.0_Validated-0A84FF?style=for-the-badge)
 ![Splunk](https://img.shields.io/badge/Splunk-Enterprise_10.4.2-000000?style=for-the-badge&logo=splunk&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-Route_53_%2B_Kinesis-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)
 ![MITRE](https://img.shields.io/badge/MITRE-T1590.002-E34F26?style=for-the-badge)
-![AI](https://img.shields.io/badge/AI_Triage-Validated-7B2CBF?style=for-the-badge)
 
-**A realistic DNS security exercise that combines completed Detection Engineering with a blind external adversary-vs-defender workflow. The official adversary uses real public DNS traffic from outside the defender AWS account; the SOC Analyst investigates only defender-visible evidence.**
+**A completed DNS reconnaissance exercise executed across a real public Internet boundary. The adversary operated outside the defender AWS account, the SOC Analyst investigated only defender-visible evidence, and Incident Response independently validated the escalation before choosing a proportionate response.**
 
-[Detection Engineering Story](DETECTION-ENGINEERING.md) · [Runbook](SCENARIO-RUNBOOK.md) · [Attacker](attacker/README.md) · [SOC Analyst](soc/README.md) · [Blind Exercise](exercise/README.md) · [SPL](spl/README.md) · [Dashboard](dashboard/README.md) · [Evidence](evidence/README.md) · [AI Mapping](ai/README.md)
+[Execution Story](SCENARIO-01-EXECUTION.md) · [Detection Engineering](detection-engineering/DETECTION-ENGINEERING.md) · [Adversary](attacker/PROJECT-LEAD-ADVERSARY.md) · [SOC Analyst](soc/SOC-ANALYST-INVESTIGATION.md) · [Incident Response](ir/INCIDENT-RESPONSE.md) · [Runbook](SCENARIO-RUNBOOK.md) · [Final Comparison](exercise/final-comparison.md)
 
 </div>
 
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%" alt="section divider" />
+---
 
-## 🎯 Scenario objective
+## Scenario at a glance
 
-Scenario 01 tests whether concentrated DNS enumeration against the controlled `soclab.abdul4rehman215.tech` namespace can be separated from ordinary public DNS activity using real Route 53 authoritative telemetry.
+Scenario 01 tests whether public-authoritative DNS reconnaissance can be detected and investigated without assuming that every unusual DNS pattern is malicious.
 
-The engineering goal was not simply to make an SPL search return a row. The goal was to build a defensible chain:
+**Primary MITRE ATT&CK:** `T1590.002 — Gather Victim Network Information: DNS`  
+**Cyber Kill Chain:** Reconnaissance  
+**Target namespace:** `soclab.abdul4rehman215.tech`
 
-```text
-trusted DNS telemetry
-    → field semantics
-    → ingestion timing
-    → baseline
-    → investigation dashboard
-    → hunting
-    → behavioral detection
-    → positive + benign validation
-    → scheduled alert
-    → analyst-ready evidence
-    → AI-assisted triage
-```
+| Role | Owner | What was completed |
+|---|---|---|
+| **Project Lead / Adversary** | [Abdul-Rehman](https://github.com/abdul4rehman215) | Preserved exercise separation, generated the authorized Case 01 activity, and executed external DNS reconnaissance from a separate AWS account |
+| **SOC Analyst / Threat Hunter** | [Musfira](https://github.com/MUSFIRA-ZAFAR) | Investigated both cases from Splunk evidence, validated AI output, closed Case 01, and escalated Case 02 |
+| **Detection Engineer** | [Sonia](https://github.com/sonia11mansha415) | Built the baseline, dashboard, hunting SPL, detection v1.0, scheduled alert and Scenario 01 AI evidence path |
+| **Incident Responder / Defender** | [Lubaba](https://github.com/lubaba1513-pixel) | Independently validated Case 02, scoped DNS/Web/VPC evidence, reviewed public exposure and selected the final response |
 
-**Primary MITRE ATT&CK:** `T1590.002 — Gather Victim Network Information: DNS`
+## Final outcomes
+
+| Case | Detection result | Human conclusion | Final action |
+|---|---|---|---|
+| **Case 01** | `16 queries / 4 names / 4 types` | **Authorized / Benign True Positive** | Closed by SOC; no IR escalation |
+| **Case 02** | `53 queries / 17 names / 6 types` | **True Positive — Suspicious / Likely Unauthorized DNS Reconnaissance** | Escalated to IR; **Preserve + Monitor — No Active Containment** |
 
 > [!IMPORTANT]
-> **Detection Engineering for Scenario 01 is complete. The full Scenario 01 SOC/IR exercise is not yet complete.** Official adversary ground truth, SOC Analyst final disposition, Incident Response, containment and post-response verification remain separate later phases.
+> `observed_dns_source` is the resolver/source address seen by Route 53 authoritative logging. It is not automatically the original endpoint that initiated the DNS lookup. That distinction influenced both SOC attribution and the IR containment decision.
 
-## 🕶️ Official exercise model — blind external adversary
+---
 
-The official run is intentionally separated from the Detection Engineering test traffic.
+## How the exercise unfolded
 
-```text
-Separate AWS account / optional external Windows
-                |
-                | public DNS / HTTPS only
-                v
-Route 53 authoritative DNS + public Web target
-                |
-                v
-             Splunk
-          /           \
-   Detection v1.0     AI assistance
-          \           /
-           SOC Analyst
-                |
-        TP / benign TP / FP / inconclusive
-                |
-             IR handoff
+```mermaid
+flowchart LR
+    DE["Detection Engineering<br/>Sonia"] --> F["Detection v1.0 frozen"]
+    F --> C1["Case 01<br/>Authorized DNS validation"]
+    F --> C2["Case 02<br/>External DNS reconnaissance"]
+    C1 --> R53[Route 53 authoritative telemetry]
+    C2 --> R53
+    R53 --> SPL[Splunk detection + dashboard]
+    SPL --> AI[AI-assisted triage]
+    AI --> SOC["SOC Analyst<br/>Musfira"]
+    SOC -->|Case 01| CLOSE["Authorized TP<br/>SOC closure"]
+    SOC -->|Case 02| IR["Incident Response<br/>Lubaba"]
+    IR --> SCOPE["DNS + Nginx + VPC Flow<br/>+ public exposure review"]
+    SCOPE --> DEC["Preserve + Monitor<br/>No Active Containment"]
 ```
 
-The Project Lead acts as the **Adversary Operator**. The SOC Analyst is not told the attack start time, source IP, commands or queried names. Actual attacker ground truth is revealed only after the analyst has locked the investigation result.
+The exercise was deliberately **information-separated**. Attacker timing, commands and ground truth were not used to guide the SOC or IR conclusions. Defender decisions were based on Route 53, Splunk, AWS asset context, Nginx, VPC Flow and the scenario AI result.
 
-Operational documents:
+---
 
-- [`attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md`](attacker/SCENARIO-01-ADVERSARY-PLAYBOOK.md)
-- [`soc/SOC-ANALYST-PLAYBOOK.md`](soc/SOC-ANALYST-PLAYBOOK.md)
-- [`exercise/BLIND-EXERCISE-PROTOCOL.md`](exercise/BLIND-EXERCISE-PROTOCOL.md)
+## Detection Engineering foundation
 
-## 👩‍💻 Detection Engineer — Sonia
-
-**[Sonia](https://github.com/sonia11mansha415)** owned the Scenario 01 Detection Engineering lifecycle.
-
-This was her first end-to-end Detection Engineering assignment. She worked from raw telemetry, mapped the real DNS fields, measured ingestion behavior, established a baseline, engineered the investigation dashboard, built hunting and detection SPL, validated positive and benign traffic, operationalized the rule as a scheduled alert, debugged cross-layer telemetry and alert-action failures, and completed and validated the Scenario 01 AI evidence path back into Splunk.
-
-Her work is documented in detail in [`DETECTION-ENGINEERING.md`](DETECTION-ENGINEERING.md).
-
-### Engineering responsibilities completed
-
-| Area | Practical work demonstrated |
-|---|---|
-| **Telemetry understanding** | Mapped real Route 53 authoritative records and preserved neutral source semantics |
-| **Baseline engineering** | Measured normal query volume, unique-name breadth and query-type diversity before threshold selection |
-| **Dashboard engineering** | Built the interactive Scenario 01 Splunk Dashboard Studio investigation surface |
-| **Threat hunting** | Built source/window behavior and raw-event investigation pivots |
-| **Detection engineering** | Developed and finalized behavioral detection `v1.0` from observed evidence |
-| **Validation** | Proved controlled positive behavior triggers and benign/basic DNS activity remains below threshold |
-| **Alert engineering** | Created, tuned and validated the scheduled Splunk alert and analyst evidence row |
-| **Troubleshooting** | Isolated Kinesis/KV Store, Linux kernel, scheduler, webhook and schema failures |
-| **AI integration** | Mapped stable alert fields into the shared AI bridge and validated the result in `dns_soc_ai` |
-
-## 🧠 Final detection at a glance
-
-The final rule is intentionally behavioral:
+Before the operational exercise began, Sonia built and validated the analyst-facing detection path:
 
 ```text
-same observed DNS source
-+ controlled lab namespace
-+ concentrated 1-minute activity
-+ query-name breadth
-+ meaningful record-type diversity
-→ Possible DNS Reconnaissance
+Route 53 telemetry
+  → field semantics
+  → ingestion timing
+  → baseline
+  → investigation dashboard
+  → hunting SPL
+  → detection v1.0
+  → positive + benign validation
+  → scheduled alert
+  → AI evidence contract
 ```
 
-Final threshold:
+Final behavioral boundary:
 
 ```text
 query_count >= 16
@@ -115,203 +90,147 @@ unique_names >= 4
 distinct_query_types >= 3
 ```
 
-`NXDOMAIN` is retained as useful context, **not** as a mandatory detection condition.
+`NXDOMAIN` remains useful evidence context; it is not a mandatory detection condition.
 
-Why these values exist:
+![Scenario 01 investigation dashboard](screenshots/detection-engineering/04-dns-investigation-dashboard.png)
 
-- measured baseline maximum query count: **15**;
-- measured baseline maximum unique names: **3**;
-- baseline showed record-type diversity can be high even in background traffic;
-- the controlled positive test produced **20 queries / 4 names / 5 record types**.
+*The final Splunk Dashboard Studio view connects high-level DNS behavior with source-aware pivots and raw events.*
 
-The production SPL is preserved in [`spl/detection.spl`](spl/detection.spl).
+Read the full engineering story in [`detection-engineering/DETECTION-ENGINEERING.md`](detection-engineering/DETECTION-ENGINEERING.md).
 
-## 📊 Investigation dashboard
+---
 
-The final Splunk Dashboard Studio implementation gives the analyst a fast path from summary to underlying DNS evidence.
+## Case 01 — the alert was real, but the activity was authorized
 
-![Scenario 01 DNS Reconnaissance Investigation dashboard](screenshots/detection-engineering/04-dns-investigation-dashboard.png)
+Case 01 came from the defender-owned `dns-soc-web01` asset. A post-change DNS validation sequence generated a concentrated authoritative-DNS pattern that genuinely crossed Detection v1.0.
 
-*The final dashboard combines source-aware KPIs, DNS activity and diversity over time, query/response distributions, top names, raw investigation events and 1-minute burst analysis under a shared time range.*
+![Authorized DNS validation batch](screenshots/attacker/case-01/01-authorized-dns-validation-batch.png)
 
-The tested Dashboard Studio definition is committed as [`dashboard/scenario-01-dns-recon.dashboard.json`](dashboard/scenario-01-dns-recon.dashboard.json).
+*The operational validation checked four names across A, AAAA, TXT and CNAME directly against the authoritative path.*
 
-## ✅ Engineering validation summary
+SOC then proved the activity belonged to a known lab asset and obtained authorization context. The correct conclusion was therefore **Authorized / Benign True Positive**, not “false positive.”
 
-| Validation | Result |
+![Case 01 detection result](screenshots/soc/case-01/Case-01_E01_Production-Detection-Triggered.png)
+
+*The detection correctly identified reconnaissance-like behavior; business and asset context changed the disposition.*
+
+Deep case record: [`soc/case-01-soc-investigation-closure.md`](soc/case-01-soc-investigation-closure.md)
+
+---
+
+## Case 02 — external DNS reconnaissance
+
+The external adversary operated from a separate AWS account and used public DNS only. The activity progressed from authority/zone inspection into service-name and record-type enumeration.
+
+![Service-name A enumeration](screenshots/attacker/case-02/02-service-name-a-enumeration.png)
+
+*The adversary probed meaningful service/environment labels against the public authoritative namespace rather than relying on attacker-side access to the defender account.*
+
+The defender-side result was a clear reconnaissance outlier:
+
+```text
+53 DNS queries
+17 unique queried names
+6 query types: A, AAAA, MX, NS, SOA, TXT
+44 NXDOMAIN / 9 NOERROR
+~43-second observed interval
+```
+
+![Case 02 activity timeline](screenshots/soc/case-02/Case-02_E03_Activity-Timeline.png)
+
+*Musfira reconstructed the staged DNS bursts from Route 53 telemetry before making the final disposition.*
+
+SOC closed its investigation as **True Positive — Suspicious / Likely Unauthorized DNS Reconnaissance**, High confidence, Medium risk, and transferred an evidence-backed handoff to Incident Response.
+
+Deep case record: [`soc/case-02-soc-investigation-ir-handoff.md`](soc/case-02-soc-investigation-ir-handoff.md)
+
+---
+
+## Incident Response — confirm the behavior, do not over-attribute it
+
+Lubaba did not simply accept the SOC conclusion. IR independently reproduced the core counts, validated the seven-day baseline, expanded the DNS timeline, correlated Nginx and VPC Flow evidence, compared peer DNS sources, and reviewed the Route 53 public hosted-zone records.
+
+![VPC Flow correlation](screenshots/ir/case-02/IR-E05b_VPC-Flow-Client-Correlation.png)
+
+*VPC Flow telemetry corroborated a web connection seen by Nginx, but the web client could not be proven to be the same original endpoint behind the Route 53-observed DNS source.*
+
+The case remained scoped to **Reconnaissance**. No exploitation, persistence, C2 or impact was established.
+
+Final IR decision:
+
+> **PRESERVE + MONITOR ONLY — NO ACTIVE CONTAINMENT**
+
+The decision was intentional: the Route 53 source was resolver-side evidence, no malicious web progression was proven, and the public DNS records were required or benign. Blocking an unproven endpoint would have created attribution and availability risk without an evidence-backed security benefit.
+
+Read [`ir/INCIDENT-RESPONSE.md`](ir/INCIDENT-RESPONSE.md) and [`ir/case-02-validation.md`](ir/case-02-validation.md).
+
+---
+
+## AI was assistance, not authority
+
+The Scenario 01 AI path returned a structured result into `index=dns_soc_ai`, including summary, confidence, observed indicators, MITRE suggestions, missing evidence and response considerations.
+
+Both Musfira and Lubaba treated AI output as a lead to validate, not a verdict to accept.
+
+```text
+AI statement
+    ↓
+What raw evidence proves this?
+    ↓
+Supported / incomplete / unsupported
+    ↓
+Human decision
+```
+
+That pattern matters most in Case 02: the AI correctly suggested DNS reconnaissance and `T1590.002`, but source identity, authorization and follow-on activity remained human investigation questions.
+
+---
+
+## Network and protocol view
+
+| Layer / view | Scenario 01 evidence |
 |---|---|
-| Real Route 53 fields understood | ✅ PASS |
-| Source identity semantics kept neutral | ✅ PASS |
-| Ingestion delay measured before alert scheduling | ✅ PASS |
-| Baseline captured before threshold choice | ✅ PASS |
-| Investigation dashboard validated | ✅ PASS |
-| Hunting searches validated | ✅ PASS |
-| Controlled recon-like positive test | ✅ PASS |
-| Benign/basic DNS test | ✅ PASS — no detection |
-| Final detection `v1.0` | ✅ PASS |
-| `validation.spl` positive + below-threshold view | ✅ PASS |
-| Scheduled alert | ✅ PASS |
-| Raw-event drilldown | ✅ PASS |
-| MITRE `T1590.002` | ✅ PASS |
-| AI webhook contract | ✅ PASS |
-| OpenAI processing | ✅ HTTP 200 |
-| AI result indexed in `dns_soc_ai` | ✅ PASS |
+| **Layer 7 — DNS** | query name, query type, response code, authoritative behavior, NXDOMAIN pattern |
+| **Layer 4** | UDP DNS; later TCP 80/443 seen in supporting web/network evidence |
+| **Layer 3** | Route 53-observed resolver/source values and VPC Flow source/destination correlation |
+| **Application** | Nginx method, URI, HTTP status, user agent |
+| **Cloud** | Route 53 hosted-zone records, CloudTrail/SSM asset attribution for Case 01 |
+| **SIEM / AI** | Splunk alert, dashboard, raw events, AI enrichment and analyst validation |
 
-See [`evidence/detection-engineering-validation.md`](evidence/detection-engineering-validation.md) for the evidence-backed validation record.
+---
 
-## 🚨 Scheduled alert
+## Repository map
 
-**Alert:** `Scenario 01 - Possible DNS Reconnaissance`
+| Area | Purpose |
+|---|---|
+| [`SCENARIO-01-EXECUTION.md`](SCENARIO-01-EXECUTION.md) | Concise end-to-end scenario story |
+| [`detection-engineering/`](detection-engineering/) | Sonia's engineering lifecycle and validation record |
+| [`attacker/`](attacker/) | Project Lead / Adversary story and reproducible adversary playbook |
+| [`soc/`](soc/) | Musfira's investigation story, reusable playbook and case dossiers |
+| [`ir/`](ir/) | Lubaba's IR investigation, validation matrix and final response decision |
+| [`exercise/`](exercise/) | Information-separation protocol and final perspective comparison |
+| [`dashboard/`](dashboard/) | Splunk Dashboard Studio JSON and dashboard notes |
+| [`spl/`](spl/) | Baseline, hunting, detection, validation SPL and scheduled-alert configuration |
+| [`ai/`](ai/) | Scenario-specific AI evidence mapping |
+| [`evidence/`](evidence/) | Master evidence map |
+| [`screenshots/`](screenshots/) | Curated visual evidence by role and case |
 
-```text
-Schedule:        * * * * *
-Search lookback: Last 3 minutes
-Trigger:         Number of Results > 0
-Trigger mode:    Once
-Throttle:        60 seconds
-Severity:        Medium
-Actions:         Add to Triggered Alerts + Webhook
-```
+---
 
-![Scheduled alert trigger](screenshots/detection-engineering/09-scheduled-alert-triggered.png)
+## Scenario completion record
 
-*The scheduled alert is enabled, fires automatically and forwards the structured result to the shared AI bridge.*
-
-Full configuration notes are in [`spl/scheduled-alert.md`](spl/scheduled-alert.md).
-
-## 🤖 Scenario 01 AI evidence path
-
-The detection remains independent of the LLM. After the alert fields were stable, Sonia mapped them into the already-deployed shared AI bridge:
-
-```text
-Detection v1.0
-    → scheduled alert
-    → native Splunk webhook
-    → Scenario 01 evidence contract
-    → shared AI bridge
-    → OpenAI structured response
-    → internal HTTPS HEC
-    → index=dns_soc_ai
-    → human analyst validation
-```
-
-The final indexed event keeps `human_validation_required=true`. AI is analyst assistance, not an automatic verdict or response authorization.
-
-See [`ai/scenario-01-ai-mapping.md`](ai/scenario-01-ai-mapping.md).
-
-## 🔬 Real telemetry used
-
-Primary Scenario 01 source:
-
-```text
-index=dns_soc_aws
-sourcetype=aws:kinesis
-```
-
-Mapped Route 53 fields:
-
-```text
-query_name
-query_type
-response_code
-protocol
-edge_location
-observed_dns_source
-edns_client_subnet
-```
-
-`observed_dns_source` means the source/resolver address seen by Route 53. It is deliberately **not** renamed `attacker_ip` without stronger attribution evidence.
-
-Supporting telemetry exists in the shared lab, but this Detection Engineering phase did not force unrelated Nginx, Resolver or CloudTrail data into the rule when they did not improve the detection hypothesis.
-
-## 🧩 Engineering challenges that mattered
-
-Three troubleshooting cases materially improved the implementation:
-
-1. **Fresh Route 53 telemetry stopped arriving.** Sonia traced the failure past the detection into the AWS Kinesis collector, found KV Store checkpoint errors, and helped isolate a Splunk KV Store/MongoDB startup problem on the newer kernel.
-2. **The scheduled alert fired but AI processing failed.** The webhook path was healthy; the bridge rejected the payload because the alert result did not match the required schema. Sonia then further corrected the [**detection spl**](https://github.com/DNSentinel-Lab/Scenario-01-DNS-Recon/blob/main/spl/detection.spl).
-
-3. **AI output reached Splunk but initially looked empty in a table.** The event was nested JSON. Sonia extracted the correct `alert.*` and `ai.*` paths and produced a clean analyst view.
-
-The full technical story and lessons learned are in [`DETECTION-ENGINEERING.md`](DETECTION-ENGINEERING.md).
-
-## 🗂️ Repository map
-
-```text
-.
-├── README.md
-├── DETECTION-ENGINEERING.md
-├── SCENARIO-RUNBOOK.md
-├── dashboard/
-│   ├── README.md
-│   └── scenario-01-dns-recon.dashboard.json
-├── spl/
-│   ├── README.md
-│   ├── baseline.spl
-│   ├── hunting.spl
-│   ├── detection.spl
-│   ├── validation.spl
-│   └── scheduled-alert.md
-├── ai/
-│   ├── README.md
-│   └── scenario-01-ai-mapping.md
-├── attacker/
-│   ├── README.md
-│   ├── SCENARIO-01-ADVERSARY-PLAYBOOK.md
-│   └── ground-truth-template.md
-├── soc/
-│   ├── README.md
-│   ├── SOC-ANALYST-PLAYBOOK.md
-│   └── investigation-template.md
-├── exercise/
-│   ├── README.md
-│   ├── BLIND-EXERCISE-PROTOCOL.md
-│   └── final-comparison-template.md
-├── evidence/
-│   ├── README.md
-│   └── detection-engineering-validation.md
-├── screenshots/
-│   ├── README.md
-│   ├── detection-engineering/
-│   └── troubleshooting/
-└── ir/
-    └── README.md
-```
-
-## 👥 Scenario team
-
-| Role | Member | Current Scenario 01 status |
-|---|---|---|
-| **Project Lead / Adversary Operator** | [Abdul-Rehman](https://github.com/abdul4rehman215) | External attacker environment ready; official blind exercise pending |
-| **SOC Analyst / Threat Hunter** | [Musfira](https://github.com/MUSFIRA-ZAFAR) | Blind investigation playbook ready; official disposition pending |
-| **Detection Engineer** | **[Sonia](https://github.com/sonia11mansha415)** | **✅ Detection Engineering complete** |
-| IR / Defender | [Lubaba](https://github.com/lubaba1513-pixel) | Official response/verification pending |
-
-## 📌 What remains outside this completed phase
-
-Detection Engineering readiness does **not** mean the whole Scenario 01 exercise is closed.
-
-Still pending for the official exercise:
-
-```text
-blind external attacker execution
-→ SOC Analyst investigation without ground truth
-→ AI vs human comparison in the exercise context
-→ SOC decision locked
-→ attacker ground-truth reveal
-→ IR decision
-→ containment if approved
-→ post-response verification
-→ final scenario outcome
-```
-
-That boundary keeps the repository truthful and follows the shared project documentation standard.
-
-## 🔗 Shared project references
-
-- [DNS Lab Infrastructure](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure)
-- [Scenario documentation standard](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure/blob/main/00-project-design/scenario-documentation-standard.md)
-- [Scenario infrastructure roadmap](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure/blob/main/00-project-design/scenario-infrastructure-roadmap.md)
+| Gate | Status |
+|---|---|
+| Detection Engineering | ✅ Complete |
+| Dashboard / hunting / detection SPL | ✅ Complete |
+| Scheduled alert | ✅ Validated |
+| AI evidence path | ✅ Validated |
+| Realistic adversary execution | ✅ Complete |
+| Case 01 SOC investigation | ✅ Closed — Authorized TP |
+| Case 02 SOC investigation | ✅ Escalated — Suspicious TP |
+| Incident Response validation | ✅ Complete |
+| Containment decision | ✅ Preserve + Monitor — No Active Containment |
+| Final comparison / lessons | ✅ Complete |
 
 > [!NOTE]
-> This repository documents security engineering and blind adversary-emulation activity against infrastructure and domains owned by, or explicitly authorized for, the project team. The official attacker operates externally to the defender account, but the scope remains limited to project-owned public services.
+> Scenario 01 demonstrates that a mature security decision is not always “block something.” Detection, attribution, business context and response proportionality all mattered to the final outcome.
