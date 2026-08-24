@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Exercise](README.md) › **Scenario 01 Final Comparison — Ground Truth vs Defender View**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 Final Comparison — Ground Truth vs Defender View
 
 **Status:** ✅ Complete  
@@ -130,3 +139,13 @@ real behavior
 ```
 
 The final outcome was realistic because the exercise did not require every alert to be malicious and did not require every incident to end with a block.
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Exercise](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>
