@@ -7,7 +7,7 @@
 
 This document records the Project Lead / Adversary side of Scenario 01: how the exercise was prepared, how the two cases were generated, what the attacker was trying to learn, and how ground truth was kept separate from the defender investigation.
 
-It is intentionally not a transcript of every command or troubleshooting step. The focus is the adversary objective, execution logic and evidence that mattered to the final scenario.
+The focus of this document is the adversary objective, execution logic and evidence that mattered to the final scenario.
 
 ## 1. Role objective
 
@@ -173,7 +173,7 @@ The defender later confirmed that the public hosted zone contained only the expe
 
 The strongest realism came from **separation of knowledge**, not from creating noisy attack volume.
 
-The Project Lead knew what was being generated. Musfira did not. Lubaba received the SOC handoff rather than attacker ground truth. This meant the defender had to decide from the same types of evidence a real team would have: target-side DNS logs, SIEM context, cloud asset evidence, Nginx, VPC Flow and analyst judgement.
+The Project Lead knew what was being generated. Musfira did not. Lubaba received the SOC handoff. This meant the defender had to decide from the same types of evidence a real team would have: target-side DNS logs, SIEM context, cloud asset evidence, Nginx, VPC Flow and analyst judgement.
 
 ## 8. Adversary lessons
 
