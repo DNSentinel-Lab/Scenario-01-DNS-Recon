@@ -4,7 +4,7 @@
 **Scenario:** DNS Reconnaissance & Enumeration  
 **Primary MITRE ATT&CK:** `T1590.002 — Gather Victim Network Information: DNS`  
 **Engineering status:** **Complete**  
-**Full scenario status:** Official SOC investigation / IR exercise still pending
+**Full scenario status:** **✅ Scenario 01 fully executed and documented**
 
 This document records the Detection Engineering work that turned raw Route 53 authoritative DNS telemetry into a validated Splunk detection, scheduled alert, analyst investigation path and Scenario 01 AI evidence flow.
 
@@ -38,7 +38,7 @@ real Route 53 events
     → AI result returned to Splunk
 ```
 
-The official synchronized Scenario 01 exercise is a later phase. The controlled queries used here were **Detection Engineering validation traffic**.
+The controlled queries in this document were **Detection Engineering validation traffic**. After Detection v1.0 was frozen, the official Scenario 01 exercise was executed separately through the Project Lead / Adversary, SOC Analyst and Incident Response roles.
 
 ---
 
@@ -721,18 +721,21 @@ The result is stronger because the problems were not hidden. Only the reusable o
 | OpenAI / HEC end-to-end path | ✅ Validated |
 | Curated repository evidence | ✅ Complete |
 
-### Boundary that remains
+### What happened after Detection Engineering
 
-This phase does **not** close the full Scenario 01 exercise. The following remain for the synchronized team exercise:
+Detection v1.0 was frozen before the operational exercise. The completed engineering work then became the defender foundation for the live Scenario 01 execution:
 
 ```text
-official adversary ground truth
-→ SOC Analyst investigation and final disposition
-→ official AI-vs-human comparison
-→ IR / Defender decision
-→ approved containment where applicable
-→ post-response verification
-→ final scenario report
+Detection Engineering complete
+→ Case 01 authorized DNS validation
+→ Musfira: Authorized / Benign True Positive
+→ Case 02 external DNS reconnaissance
+→ Musfira: Suspicious / Likely Unauthorized TP
+→ Lubaba: independent IR validation
+→ Preserve + Monitor / No Active Containment
+→ final cross-role comparison
 ```
 
-That distinction keeps the repository technically accurate while giving the completed Detection Engineering work its own clear finish line.
+The operational exercise did not require a post-event threshold change. The strongest carry-forward lesson remained the same: preserve source semantics, validate behavior with raw evidence, and let human context determine authorization and response.
+
+Continue with [`../SCENARIO-01-EXECUTION.md`](../SCENARIO-01-EXECUTION.md).

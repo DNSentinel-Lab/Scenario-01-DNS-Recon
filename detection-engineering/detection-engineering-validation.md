@@ -143,3 +143,11 @@ Historical multi-hour delays were treated as ingestion anomalies rather than as 
 **Scenario 01 Detection Engineering: COMPLETE / READY FOR OFFICIAL EXERCISE.**
 
 This decision covers the detection-engineering lifecycle only. It does not mark SOC final disposition, IR, containment or final scenario verification complete.
+
+---
+
+## Operational follow-through
+
+After these engineering gates passed, Detection v1.0 was frozen and used unchanged for the completed Scenario 01 exercise. Case 01 produced an Authorized / Benign True Positive after SOC asset/business-context validation. Case 02 produced a suspicious DNS-reconnaissance handoff that IR independently validated before choosing Preserve + Monitor / No Active Containment.
+
+See [`../SCENARIO-01-EXECUTION.md`](../SCENARIO-01-EXECUTION.md).

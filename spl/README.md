@@ -70,3 +70,7 @@ Records the final schedule, lookback, trigger, throttle, actions and evidence co
 ## Engineering rule
 
 Thresholds in this folder came from the real lab baseline and controlled tests. They are not presented as universal DNS-security thresholds and should be re-baselined if the environment or traffic profile changes materially.
+
+## Operational result
+
+Detection v1.0 was frozen before the final exercise and used unchanged for both official cases. It correctly surfaced the authorized Case 01 behavior for human contextual closure and the suspicious Case 02 reconnaissance for SOC escalation to IR.
