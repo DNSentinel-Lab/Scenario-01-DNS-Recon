@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](README.md) › **Scenario 01 Runbook — DNS Reconnaissance & Enumeration**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 Runbook — DNS Reconnaissance & Enumeration
 
 **Status:** ✅ Complete  
@@ -505,3 +514,13 @@ The flagship stories intentionally use fewer screenshots than the evidence folde
 > **Scenario 01 — Complete**
 
 Detection Engineering, adversary execution, SOC investigation, Incident Response validation, response decision, evidence organization and final comparison are all documented.
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](README.md) · [🏗️ Infrastructure](https://github.com/DNSentinel-Lab/DNS-Lab-Infrastructure) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>
