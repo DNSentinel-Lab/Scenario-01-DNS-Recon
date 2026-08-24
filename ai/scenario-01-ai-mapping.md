@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Ai](README.md) › **Scenario 01 AI Mapping — `dns_recon_v1`**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 AI Mapping — `dns_recon_v1`
 
 **Status:** **✅ End-to-end validated**
@@ -151,3 +160,13 @@ index=dns_soc_ai
 ## Human validation boundary
 
 The official Scenario 01 exercise still requires the SOC Analyst to compare AI assistance with the original Route 53 evidence and record where the model was correct, incomplete or wrong.
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Ai](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>
