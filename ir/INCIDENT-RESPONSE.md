@@ -3,10 +3,10 @@
 **Incident Responder / Defender:** [Lubaba](https://github.com/lubaba1513-pixel)  
 **Case:** 02 — Suspicious / Likely Unauthorized DNS Reconnaissance  
 **MITRE ATT&CK:** `T1590.002 — Gather Victim Network Information: DNS`  
-**Cyber Kill Chain:** Reconnaissance  
+**Cyber Kill Chain:** `Reconnaissance`  
 **Status:** ✅ IR validation complete; case closed with **Preserve + Monitor — No Active Containment**
 
-Lubaba's role began after Musfira transferred an evidence-backed SOC handoff. The objective was not to repeat the entire SOC investigation or to force a block. IR independently validated the escalation, scoped possible follow-on activity, reviewed public exposure and selected a response that matched the evidence.
+Lubaba's role began after Musfira transferred an evidence-backed SOC Analyst handoff. The objective was not to repeat the entire SOC investigation or to force a block. IR independently validated the escalation, scoped possible follow-on activity, reviewed public exposure and selected a response that matched the evidence.
 
 ## 1. SOC handoff received
 
@@ -22,10 +22,9 @@ Observed period: 2026-08-23 10:21:51–10:22:34
 44 NXDOMAIN / 9 NOERROR
 MITRE: T1590.002
 Kill Chain: Reconnaissance
-Ownership / authorization: unresolved
 ```
 
-IR accepted the case for independent validation but did not treat the SOC conclusion as proof of endpoint identity or a containment instruction.
+IR accepted the case for independent validation but did not treat the SOC Analyst conclusion as proof of endpoint identity or a containment instruction.
 
 ## 2. Independent acceptance — reproduce the SOC facts
 
@@ -44,7 +43,7 @@ Lubaba reproduced the core metrics directly from Splunk using the original event
 - UDP;
 - `10:21:51–10:22:34`.
 
-This allowed IR to accept the escalation on its evidence, not just on the SOC label.
+This allowed IR to accept the escalation on its evidence.
 
 ## 3. Seven-day baseline validation
 
@@ -52,7 +51,7 @@ IR independently confirmed that the observed DNS source appeared only in the Cas
 
 ![IR seven-day baseline](../screenshots/ir/case-02/IR-E02_Seven-Day-Baseline-Validation.png)
 
-Important wording remained conservative: this established a first-seen Route 53-observed source in the available telemetry. It did not prove the original client was new or malicious.
+Important wording remained conservative: this established a first-seen Route 53-observed source in the available telemetry. 
 
 ## 4. Extended DNS timeline
 
@@ -186,20 +185,20 @@ No AWS, DNS, Nginx, security-group or network control was changed simply to crea
 | Containment | **No active containment** |
 | Response | Preserve evidence + continue monitoring |
 | MITRE | `T1590.002` |
-| Cyber Kill Chain | Reconnaissance |
+| Cyber Kill Chain | `Reconnaissance` |
 | Final status | **Closed after IR validation** |
 
 ## 12. AI recommendation assessment
 
-IR retained the same human-approval boundary used by SOC.
+IR retained the same human-approval boundary used by the SOC Analyst.
 
 Any AI response recommendation had to be compared with attribution, scope and business impact. A recommendation to block the Route 53-observed source would have been unsupported because the original endpoint was not established.
 
-AI remained useful for investigation prompts; it did not authorize containment.
+AI remained useful for investigation prompts.
 
 ## 13. Detection Engineering feedback
 
-The evidence supported the core Detection v1.0 behavior and did not justify changing the frozen threshold after the exercise.
+The evidence supported the core Detection behavior.
 
 Reusable feedback:
 
@@ -213,7 +212,7 @@ Reusable feedback:
 
 The strongest IR decision in Scenario 01 was not a block. It was knowing when a block was **not** supported.
 
-Lubaba validated the SOC facts, expanded the scope, checked the network and application layers, reviewed what was actually public, and stopped the investigation at the evidence boundary. That prevented a reconnaissance case from being overstated as compromise and prevented an observed resolver from being treated as a confirmed attacker endpoint.
+Lubaba validated the SOC Analyst facts, expanded the scope, checked the network and application layers, reviewed what was actually public, and stopped the investigation at the evidence boundary. That prevented a reconnaissance case from being overstated as compromise and prevented an observed resolver from being treated as a confirmed attacker endpoint.
 
 ## 15. Related files
 
