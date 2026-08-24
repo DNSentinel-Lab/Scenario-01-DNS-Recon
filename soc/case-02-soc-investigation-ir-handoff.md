@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Soc](README.md) › **Case 02 — SOC Investigation & IR Handoff**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Case 02 — SOC Investigation & IR Handoff
 
 **Scenario 01 — DNS Reconnaissance & Enumeration**  
@@ -411,3 +420,13 @@ correlation was found in the available defender telemetry. SOC assesses
 the activity as a high-confidence True Positive for suspicious/likely
 unauthorized DNS reconnaissance and escalates for follow-on correlation,
 containment decision, and response.
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Soc](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

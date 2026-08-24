@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Soc](README.md) › **Scenario 01 SOC Analyst Playbook — DNS Reconnaissance & Enumeration**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 SOC Analyst Playbook — DNS Reconnaissance & Enumeration
 
 **Analyst:** [Musfira](https://github.com/MUSFIRA-ZAFAR)  
@@ -489,3 +498,13 @@ IR handoff when warranted
 ## Analyst principle
 
 **Logs are evidence, not answers. The alert starts the investigation; the analyst finishes it.**
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Soc](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Soc](README.md) › **Scenario 01 SOC Investigation Template**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 SOC Investigation Template
 
 ## Alert identity
@@ -86,3 +95,13 @@ Complete only after the Project Lead reveals attacker ground truth.
 - Did AI agree with the raw evidence?
 - Was the final disposition correct?
 - Detection feedback for Sonia:
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Soc](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

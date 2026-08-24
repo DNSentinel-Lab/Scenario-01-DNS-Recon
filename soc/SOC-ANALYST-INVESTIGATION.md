@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Soc](README.md) › **SOC Analyst Investigation — Scenario 01 DNS Reconnaissance**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # SOC Analyst Investigation — Scenario 01 DNS Reconnaissance
 
 **SOC Analyst / Threat Hunter:** [Musfira](https://github.com/MUSFIRA-ZAFAR)  
@@ -250,3 +259,13 @@ IR was specifically asked to validate the SOC facts, investigate any web/network
 Full Case 01 evidence: [`case-01-soc-investigation-closure.md`](case-01-soc-investigation-closure.md)  
 Full Case 02 handoff: [`case-02-soc-investigation-ir-handoff.md`](case-02-soc-investigation-ir-handoff.md)  
 IR continuation: [`../ir/INCIDENT-RESPONSE.md`](../ir/INCIDENT-RESPONSE.md)
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Soc](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

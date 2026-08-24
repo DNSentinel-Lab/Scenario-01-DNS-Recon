@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Soc](README.md) › **Case 01 — SOC Investigation Closure**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Case 01 — SOC Investigation Closure
 
 **Scenario 01 — DNS Reconnaissance & Enumeration**  
@@ -372,3 +381,12 @@ scoped and documented asset/change-aware suppression only after review.
   this chat; add one if audit-grade external proof is required for
   publication.
 
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Soc](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>
