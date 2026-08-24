@@ -372,19 +372,3 @@ scoped and documented asset/change-aware suppression only after review.
   this chat; add one if audit-grade external proof is required for
   publication.
 
-# How to Pass Case 01 to IR (Informational Only)
-
-Case 01 does not require incident escalation. If IR or the project lead
-wants an informational review, provide the Case-01 folder and clearly
-mark it CLOSED — AUTHORIZED / BENIGN TRUE POSITIVE. Do not ask IR to
-contain the source.
-
-- Provide this DOCX/Markdown case report.
-
-- Provide SPL-Queries.txt and the E01–E10 evidence folder.
-
-- State that authorization was confirmed and the case is closed by SOC.
-
-- If audit-grade authorization proof is required, add the approved
-  test/change record because no separate ticket screenshot was supplied
-  in this chat.
