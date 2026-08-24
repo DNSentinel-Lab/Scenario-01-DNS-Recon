@@ -414,20 +414,3 @@ correlation was found in the available defender telemetry. SOC assesses
 the activity as a high-confidence True Positive for suspicious/likely
 unauthorized DNS reconnaissance and escalates for follow-on correlation,
 containment decision, and response.
-
-## How to Pass Case 02 to IR
-
-- Send this DOCX/Markdown report.
-
-- Send SPL-Queries.txt with the exact searches and time ranges.
-
-- Send the evidence folder containing E01–E09 plus the E10 disposition
-  note.
-
-- Tell IR to validate follow-on web/network activity, determine whether
-  discovered names were subsequently accessed, decide on proportionate
-  containment, preserve additional evidence, and verify any response
-  action.
-
-- SOC should remain available for clarification and additional Splunk
-  searches after IR confirms receipt.
