@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Attacker](README.md) › **Scenario 01 — Completed Private Adversary Ground Truth**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Scenario 01 — Completed Private Adversary Ground Truth
 
 > This record was kept separate from the defender investigation during live execution. It was completed after the SOC disposition and Incident Response handoff/decision were locked.
@@ -173,3 +182,13 @@ dig @"$AUTH" "$DOMAIN" AXFR +time=3 +tries=1
 - [`../soc/case-01-soc-investigation-closure.md`](../soc/case-01-soc-investigation-closure.md)
 - [`../soc/case-02-soc-investigation-ir-handoff.md`](../soc/case-02-soc-investigation-ir-handoff.md)
 - [`../exercise/final-comparison.md`](../exercise/final-comparison.md)
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Attacker](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>

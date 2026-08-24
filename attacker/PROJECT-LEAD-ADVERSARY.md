@@ -1,3 +1,12 @@
+<a id="top"></a>
+
+> 🧭 [Scenario 01](../README.md) › [Attacker](README.md) › **Project Lead / Adversary — Scenario 01 DNS Reconnaissance**
+
+![Scenario](https://img.shields.io/badge/Scenario_01-Complete-2EA44F?style=flat-square)
+![DNSentinel](https://img.shields.io/badge/DNSentinel-Technical_Record-00F5FF?style=flat-square)
+
+---
+
 # Project Lead / Adversary — Scenario 01 DNS Reconnaissance
 
 **Role owner:** [Abdul-Rehman](https://github.com/abdul4rehman215)  
@@ -189,3 +198,13 @@ The Project Lead knew what was being generated. Musfira did not. Lubaba received
 - [`ground-truth-template.md`](ground-truth-template.md) — controller evidence template
 - [`../SCENARIO-01-EXECUTION.md`](../SCENARIO-01-EXECUTION.md) — complete scenario story
 - [`../exercise/final-comparison.md`](../exercise/final-comparison.md) — attacker vs telemetry vs defender comparison
+
+---
+
+<div align="center">
+
+[🏠 Scenario Home](../README.md) · [📁 Attacker](README.md) · [⬆ Back to top](#top)
+
+<sub>DNSentinel Lab · Evidence-first DNS security engineering</sub>
+
+</div>
