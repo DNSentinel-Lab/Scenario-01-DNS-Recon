@@ -1,0 +1,8 @@
+Case 01 Authorization Confirmation
+
+During the SOC investigation, the source was mapped to the known SOC lab EC2 asset dns-soc-web01 (instance i-077d7b9a9de0b1387, public IP 100.49.192.164, private IP 10.50.10.10). The environment owner confirmed the reconnaissance-like activity was approved in the controlled lab.
+
+No separate change-ticket/authorization screenshot was supplied in this chat. If publication requires audit-grade authorization evidence, add the approved test/change record to this evidence package.
+
+Final disposition: AUTHORIZED / BENIGN TRUE POSITIVE.
+IR escalation: Not required.
