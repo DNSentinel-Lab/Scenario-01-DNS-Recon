@@ -44,17 +44,38 @@ This workspace records how Sonia turned real Route 53 authoritative DNS telemetr
 ## 🔁 Engineering path
 
 ```mermaid
-flowchart LR
-    A["Route 53 Telemetry"] --> B["Field Mapping"]
-    B --> C["Ingestion Timing"]
-    C --> D["Baseline"]
-    D --> E["Dashboard + Hunts"]
-    E --> F["Detection v1.0"]
-    F --> G["Positive + Benign Validation"]
-    G --> H["Scheduled Alert"]
-    H --> I["Raw Evidence Drilldown"]
-    I --> J["AI Evidence Contract"]
-    J --> K["SOC-Ready"]
+flowchart TB
+
+    subgraph P1["📡 Data Foundation"]
+        direction LR
+        A["Route 53<br/>Telemetry"] --> B["Field<br/>Mapping"]
+        B --> C["Ingestion<br/>Timing"]
+        C --> D["Baseline"]
+    end
+
+    subgraph P2["🛠️ Detection Build"]
+        direction LR
+        E["Dashboard<br/>+ Hunts"] --> F["Detection<br/>v1.0"]
+        F --> G["Positive + Benign<br/>Validation"]
+        G --> H["Scheduled<br/>Alert"]
+    end
+
+    subgraph P3["🎯 Analyst Readiness"]
+        direction LR
+        I["Raw Evidence<br/>Drilldown"] --> J["AI Evidence<br/>Contract"]
+        J --> K["SOC-Ready"]
+    end
+
+    D --> E
+    H --> I
+
+    classDef phase1 fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
+    classDef phase2 fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#ffffff;
+    classDef phase3 fill:#052e16,stroke:#4ade80,stroke-width:2px,color:#ffffff;
+
+    class A,B,C,D phase1;
+    class E,F,G,H phase2;
+    class I,J,K phase3;
 ```
 
 The finish line was not simply **"the SPL returned a result."** The rule had to survive validation, run automatically, expose useful evidence, preserve a raw-event path, and hand structured context to the shared AI bridge without giving AI decision authority.
