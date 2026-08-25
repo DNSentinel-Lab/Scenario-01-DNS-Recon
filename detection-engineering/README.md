@@ -46,36 +46,89 @@ This workspace records how Sonia turned real Route 53 authoritative DNS telemetr
 ```mermaid
 flowchart TB
 
-    subgraph P1["📡 Data Foundation"]
+    %% ─────────────────────────────
+    %% PHASE 1 — DATA FOUNDATION
+    %% ─────────────────────────────
+    subgraph DATA["📡  DATA FOUNDATION"]
         direction LR
-        A["Route 53<br/>Telemetry"] --> B["Field<br/>Mapping"]
-        B --> C["Ingestion<br/>Timing"]
-        C --> D["Baseline"]
+
+        A["🌐 Route 53<br/>Telemetry"]
+        B["🧩 Field<br/>Mapping"]
+        C["⏱️ Ingestion<br/>Timing"]
+        D["📊 Clean<br/>Baseline"]
+
+        A --> B --> C --> D
     end
 
-    subgraph P2["🛠️ Detection Build"]
+    %% ─────────────────────────────
+    %% PHASE 2 — DETECTION BUILD
+    %% ─────────────────────────────
+    subgraph BUILD["🛠️  DETECTION ENGINEERING"]
         direction LR
-        E["Dashboard<br/>+ Hunts"] --> F["Detection<br/>v1.0"]
-        F --> G["Positive + Benign<br/>Validation"]
-        G --> H["Scheduled<br/>Alert"]
+
+        E["🔎 Dashboard<br/>+ Hunts"]
+        F["🛡️ Detection<br/>v1.0"]
+        G["✅ Positive + Benign<br/>Validation"]
+        H["🚨 Scheduled<br/>Alert"]
+
+        E --> F --> G --> H
     end
 
-    subgraph P3["🎯 Analyst Readiness"]
+    %% ─────────────────────────────
+    %% PHASE 3 — SOC READINESS
+    %% ─────────────────────────────
+    subgraph READY["🎯  SOC READINESS"]
         direction LR
-        I["Raw Evidence<br/>Drilldown"] --> J["AI Evidence<br/>Contract"]
-        J --> K["SOC-Ready"]
+
+        I["🔬 Raw Evidence<br/>Drilldown"]
+        J["🤖 AI Evidence<br/>Contract"]
+        K["🏁 SOC-Ready"]
+
+        I --> J --> K
     end
 
     D --> E
     H --> I
 
-    classDef phase1 fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
-    classDef phase2 fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#ffffff;
-    classDef phase3 fill:#052e16,stroke:#4ade80,stroke-width:2px,color:#ffffff;
+    %% ─────────────────────────────
+    %% NODE STYLES
+    %% ─────────────────────────────
+    classDef telemetry fill:#0c4a6e,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
+    classDef mapping fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
+    classDef timing fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#ffffff;
+    classDef baseline fill:#134e4a,stroke:#2dd4bf,stroke-width:2px,color:#ffffff;
 
-    class A,B,C,D phase1;
-    class E,F,G,H phase2;
-    class I,J,K phase3;
+    classDef hunting fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#ffffff;
+    classDef detection fill:#4c1d95,stroke:#a78bfa,stroke-width:2px,color:#ffffff;
+    classDef validation fill:#713f12,stroke:#fbbf24,stroke-width:2px,color:#ffffff;
+    classDef alert fill:#7f1d1d,stroke:#f87171,stroke-width:2px,color:#ffffff;
+
+    classDef evidence fill:#164e63,stroke:#22d3ee,stroke-width:2px,color:#ffffff;
+    classDef ai fill:#581c87,stroke:#e879f9,stroke-width:2px,color:#ffffff;
+    classDef final fill:#14532d,stroke:#4ade80,stroke-width:3px,color:#ffffff;
+
+    class A telemetry;
+    class B mapping;
+    class C timing;
+    class D baseline;
+
+    class E hunting;
+    class F detection;
+    class G validation;
+    class H alert;
+
+    class I evidence;
+    class J ai;
+    class K final;
+
+    %% ─────────────────────────────
+    %% GROUP STYLES
+    %% ─────────────────────────────
+    style DATA fill:#0d1117,stroke:#38bdf8,stroke-width:1px
+    style BUILD fill:#0d1117,stroke:#a78bfa,stroke-width:1px
+    style READY fill:#0d1117,stroke:#4ade80,stroke-width:1px
+
+    linkStyle default stroke:#94a3b8,stroke-width:2px
 ```
 
 The finish line was not simply **"the SPL returned a result."** The rule had to survive validation, run automatically, expose useful evidence, preserve a raw-event path, and hand structured context to the shared AI bridge without giving AI decision authority.
