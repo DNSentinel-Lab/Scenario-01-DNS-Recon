@@ -51,17 +51,119 @@ A correct alert is not the same thing as a confirmed malicious incident. This sc
 ## 🏗️ Scenario Architecture
 
 ```mermaid
-flowchart LR
-    ADV["External Adversary<br/>Separate AWS account"] -->|Public DNS recon| R53[Route 53 Authoritative DNS]
-    R53 -->|Query telemetry| SPL[Splunk Enterprise]
-    SPL --> DET[Detection v1.0]
-    DET --> AI[AI-Assisted Summary]
-    DET --> SOC[SOC Investigation]
-    AI --> SOC
-    SOC -->|Case 01| CLOSE["Authorized TP<br/>SOC Closure"]
-    SOC -->|Case 02| IR[Incident Response]
-    IR --> CORR["DNS + Nginx + VPC Flow<br/>+ Public Exposure Review"]
-    CORR --> DEC["Preserve + Monitor<br/>No Active Containment"]
+flowchart TB
+
+    %% =========================================================
+    %% 1 — EXTERNAL ACTIVITY
+    %% =========================================================
+    subgraph EXT["🌐 1 · External Activity"]
+        direction LR
+        ADV["🎯 External Adversary<br/>Separate AWS Account"]
+        R53["🌍 Route 53<br/>Authoritative DNS"]
+
+        ADV -->|"Public DNS Recon"| R53
+    end
+
+    %% =========================================================
+    %% 2 — TELEMETRY + DETECTION
+    %% =========================================================
+    subgraph DETECTION["📡 2 · Telemetry & Detection"]
+        direction LR
+        SPL["🟢 Splunk<br/>Enterprise"]
+        DET["🛡️ Detection<br/>v1.0"]
+
+        SPL --> DET
+    end
+
+    R53 -->|"DNS Query Telemetry"| SPL
+
+    %% =========================================================
+    %% 3 — ANALYSIS
+    %% =========================================================
+    subgraph ANALYSIS["🔍 3 · SOC Analysis"]
+        direction LR
+
+        AI["🤖 AI-Assisted<br/>Summary"]
+        SOC["👩‍💻 SOC<br/>Investigation"]
+
+        AI --> SOC
+    end
+
+    DET --> AI
+    DET --> SOC
+
+    %% =========================================================
+    %% 4 — CASE DECISION
+    %% =========================================================
+    DECISION{"⚖️ Analyst<br/>Decision"}
+
+    SOC --> DECISION
+
+    %% =========================================================
+    %% CASE 01
+    %% =========================================================
+    subgraph CASE1["✅ Case 01 · Authorized Activity"]
+        direction TB
+
+        AUTH["✔️ Authorized<br/>True Positive"]
+        CLOSE["📁 SOC Closure<br/>Document + Preserve"]
+
+        AUTH --> CLOSE
+    end
+
+    %% =========================================================
+    %% CASE 02
+    %% =========================================================
+    subgraph CASE2["🚨 Case 02 · Incident Path"]
+        direction TB
+
+        IR["🛡️ Incident<br/>Response"]
+
+        CORR["🔗 Evidence Correlation<br/>DNS + Nginx + VPC Flow<br/>+ Public Exposure Review"]
+
+        FINAL["📋 Preserve + Monitor<br/>No Active Containment"]
+
+        IR --> CORR --> FINAL
+    end
+
+    DECISION -->|"Case 01"| AUTH
+    DECISION -->|"Case 02"| IR
+
+
+    %% =========================================================
+    %% VISUAL STYLE
+    %% =========================================================
+
+    classDef external fill:#3b1d16,stroke:#fb923c,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef dns fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef splunk fill:#052e16,stroke:#4ade80,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef detection fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef ai fill:#083344,stroke:#22d3ee,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef analyst fill:#422006,stroke:#fbbf24,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef decision fill:#1f2937,stroke:#f8fafc,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef benign fill:#052e16,stroke:#22c55e,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef incident fill:#450a0a,stroke:#f87171,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef evidence fill:#172033,stroke:#38bdf8,stroke-width:2px,color:#ffffff,font-size:16px;
+
+    class ADV external;
+    class R53 dns;
+    class SPL splunk;
+    class DET detection;
+    class AI ai;
+    class SOC analyst;
+    class DECISION decision;
+
+    class AUTH,CLOSE benign;
+    class IR incident;
+    class CORR,FINAL evidence;
+
+    style EXT fill:#111827,stroke:#fb923c,stroke-width:1px
+    style DETECTION fill:#111827,stroke:#4ade80,stroke-width:1px
+    style ANALYSIS fill:#111827,stroke:#22d3ee,stroke-width:1px
+    style CASE1 fill:#0d1f17,stroke:#22c55e,stroke-width:1px
+    style CASE2 fill:#211111,stroke:#f87171,stroke-width:1px
+
+    linkStyle default stroke:#94a3b8,stroke-width:2px
 ```
 
 > The scenario uses the shared DNSentinel infrastructure but keeps the project view focused on the actual attack → detection → investigation → response path.
