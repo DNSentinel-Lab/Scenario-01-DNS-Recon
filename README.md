@@ -51,118 +51,180 @@ A correct alert is not the same thing as a confirmed malicious incident. This sc
 ## 🏗️ Scenario Architecture
 
 ```mermaid
-flowchart TB
+flowchart LR
 
-    %% =========================================================
+    %% =====================================================
     %% 1 — EXTERNAL ACTIVITY
-    %% =========================================================
-    subgraph EXT["🌐 1 · External Activity"]
-        direction LR
+    %% =====================================================
+    subgraph EXT[" "]
+        direction TB
+
+        EH["🌐 1 · External Activity"]
+
         ADV["🎯 External Adversary<br/>Separate AWS Account"]
         R53["🌍 Route 53<br/>Authoritative DNS"]
 
+        EH ~~~ ADV
         ADV -->|"Public DNS Recon"| R53
     end
 
-    %% =========================================================
+
+    %% =====================================================
     %% 2 — TELEMETRY + DETECTION
-    %% =========================================================
-    subgraph DETECTION["📡 2 · Telemetry & Detection"]
-        direction LR
+    %% =====================================================
+    subgraph DETECT[" "]
+        direction TB
+
+        TH["📡 2 · Telemetry + Detection"]
+
         SPL["🟢 Splunk<br/>Enterprise"]
         DET["🛡️ Detection<br/>v1.0"]
 
+        TH ~~~ SPL
         SPL --> DET
     end
 
-    R53 -->|"DNS Query Telemetry"| SPL
 
-    %% =========================================================
-    %% 3 — ANALYSIS
-    %% =========================================================
-    subgraph ANALYSIS["🔍 3 · SOC Analysis"]
-        direction LR
+    %% =====================================================
+    %% 3 — SOC ANALYSIS
+    %% =====================================================
+    subgraph ANALYZE[" "]
+        direction TB
+
+        AH["🔍 3 · SOC Analysis"]
 
         AI["🤖 AI-Assisted<br/>Summary"]
         SOC["👩‍💻 SOC<br/>Investigation"]
 
+        AH ~~~ AI
         AI --> SOC
     end
 
-    DET --> AI
-    DET --> SOC
 
-    %% =========================================================
-    %% 4 — CASE DECISION
-    %% =========================================================
-    DECISION{"⚖️ Analyst<br/>Decision"}
-
-    SOC --> DECISION
-
-    %% =========================================================
-    %% CASE 01
-    %% =========================================================
-    subgraph CASE1["✅ Case 01 · Authorized Activity"]
+    %% =====================================================
+    %% 4 — DECISION + OUTCOME
+    %% =====================================================
+    subgraph OUTCOME[" "]
         direction TB
 
-        AUTH["✔️ Authorized<br/>True Positive"]
-        CLOSE["📁 SOC Closure<br/>Document + Preserve"]
+        OH["⚖️ 4 · Decision + Outcome"]
 
-        AUTH --> CLOSE
+        DEC{"⚖️ Analyst<br/>Decision"}
+
+        OH ~~~ DEC
+
+
+        %% -----------------------------------------
+        %% TWO CASE PATHS
+        %% -----------------------------------------
+        subgraph CASES[" "]
+            direction LR
+
+            subgraph CASE1[" "]
+                direction TB
+
+                AUTH["✅ Authorized<br/>True Positive"]
+
+                CLOSE["📁 SOC Closure<br/>Document + Preserve"]
+
+                AUTH --> CLOSE
+            end
+
+
+            subgraph CASE2[" "]
+                direction TB
+
+                IR["🚨 Incident<br/>Response"]
+
+                CORR["🔗 Evidence Correlation<br/>DNS + Nginx + VPC Flow"]
+
+                FINAL["📋 Preserve + Monitor<br/>No Active Containment"]
+
+                IR --> CORR --> FINAL
+            end
+        end
+
+        DEC -->|"Case 01"| CASE1
+        DEC -->|"Case 02"| CASE2
     end
 
-    %% =========================================================
-    %% CASE 02
-    %% =========================================================
-    subgraph CASE2["🚨 Case 02 · Incident Path"]
-        direction TB
 
-        IR["🛡️ Incident<br/>Response"]
+    %% =====================================================
+    %% STAGE-TO-STAGE FLOW
+    %% Group connections preserve internal layouts
+    %% and avoid heading collisions.
+    %% =====================================================
+    EXT -->|"DNS Query Telemetry"| DETECT
 
-        CORR["🔗 Evidence Correlation<br/>DNS + Nginx + VPC Flow<br/>+ Public Exposure Review"]
+    DETECT -->|"Detection + Context"| ANALYZE
 
-        FINAL["📋 Preserve + Monitor<br/>No Active Containment"]
-
-        IR --> CORR --> FINAL
-    end
-
-    DECISION -->|"Case 01"| AUTH
-    DECISION -->|"Case 02"| IR
+    ANALYZE -->|"Evidence-Backed Decision"| OUTCOME
 
 
-    %% =========================================================
-    %% VISUAL STYLE
-    %% =========================================================
+    %% =====================================================
+    %% HEADER STYLES
+    %% =====================================================
+    classDef extHeader fill:#3b1d16,stroke:#fb923c,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef detectHeader fill:#0f2a1d,stroke:#4ade80,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef analysisHeader fill:#083344,stroke:#22d3ee,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef outcomeHeader fill:#312e81,stroke:#c084fc,stroke-width:2px,color:#ffffff,font-size:16px;
 
+    class EH extHeader;
+    class TH detectHeader;
+    class AH analysisHeader;
+    class OH outcomeHeader;
+
+
+    %% =====================================================
+    %% NODE STYLES
+    %% =====================================================
     classDef external fill:#3b1d16,stroke:#fb923c,stroke-width:2px,color:#ffffff,font-size:16px;
     classDef dns fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#ffffff,font-size:16px;
-    classDef splunk fill:#052e16,stroke:#4ade80,stroke-width:2px,color:#ffffff,font-size:16px;
+
+    classDef splunk fill:#052e16,stroke:#4ade80,stroke-width:3px,color:#ffffff,font-size:16px;
     classDef detection fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#ffffff,font-size:16px;
-    classDef ai fill:#083344,stroke:#22d3ee,stroke-width:2px,color:#ffffff,font-size:16px;
-    classDef analyst fill:#422006,stroke:#fbbf24,stroke-width:2px,color:#ffffff,font-size:16px;
+
+    classDef ai fill:#581c87,stroke:#e879f9,stroke-width:2px,color:#ffffff,font-size:16px;
+    classDef analyst fill:#083344,stroke:#22d3ee,stroke-width:2px,color:#ffffff,font-size:16px;
+
     classDef decision fill:#1f2937,stroke:#f8fafc,stroke-width:2px,color:#ffffff,font-size:16px;
+
     classDef benign fill:#052e16,stroke:#22c55e,stroke-width:2px,color:#ffffff,font-size:16px;
     classDef incident fill:#450a0a,stroke:#f87171,stroke-width:2px,color:#ffffff,font-size:16px;
     classDef evidence fill:#172033,stroke:#38bdf8,stroke-width:2px,color:#ffffff,font-size:16px;
 
     class ADV external;
     class R53 dns;
+
     class SPL splunk;
     class DET detection;
+
     class AI ai;
     class SOC analyst;
-    class DECISION decision;
+
+    class DEC decision;
 
     class AUTH,CLOSE benign;
     class IR incident;
     class CORR,FINAL evidence;
 
-    style EXT fill:#111827,stroke:#fb923c,stroke-width:1px
-    style DETECTION fill:#111827,stroke:#4ade80,stroke-width:1px
-    style ANALYSIS fill:#111827,stroke:#22d3ee,stroke-width:1px
+
+    %% =====================================================
+    %% CONTAINER STYLES
+    %% =====================================================
+    style EXT fill:#0d1117,stroke:#fb923c,stroke-width:1px
+    style DETECT fill:#0d1117,stroke:#4ade80,stroke-width:1px
+    style ANALYZE fill:#0d1117,stroke:#22d3ee,stroke-width:1px
+    style OUTCOME fill:#0d1117,stroke:#c084fc,stroke-width:1px
+
+    style CASES fill:#111827,stroke:#30363d,stroke-width:1px
     style CASE1 fill:#0d1f17,stroke:#22c55e,stroke-width:1px
     style CASE2 fill:#211111,stroke:#f87171,stroke-width:1px
 
+
+    %% =====================================================
+    %% EDGE STYLE
+    %% =====================================================
     linkStyle default stroke:#94a3b8,stroke-width:2px
 ```
 
