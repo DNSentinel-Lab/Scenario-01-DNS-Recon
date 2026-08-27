@@ -44,55 +44,83 @@ This workspace records how Sonia turned real Route 53 authoritative DNS telemetr
 ## 🔁 Engineering path
 
 ```mermaid
-flowchart TB
+flowchart LR
 
-    %% ─────────────────────────────
+    %% =====================================================
     %% PHASE 1 — DATA FOUNDATION
-    %% ─────────────────────────────
-    subgraph DATA["📡  DATA FOUNDATION"]
-        direction LR
+    %% =====================================================
+    subgraph DATA[" "]
+        direction TB
+
+        DH["📡 1 · DATA FOUNDATION"]
 
         A["🌐 Route 53<br/>Telemetry"]
         B["🧩 Field<br/>Mapping"]
         C["⏱️ Ingestion<br/>Timing"]
         D["📊 Clean<br/>Baseline"]
 
-        A --> B --> C --> D
+        DH --> A --> B --> C --> D
     end
 
-    %% ─────────────────────────────
-    %% PHASE 2 — DETECTION BUILD
-    %% ─────────────────────────────
-    subgraph BUILD["🛠️  DETECTION ENGINEERING"]
-        direction LR
+
+    %% =====================================================
+    %% PHASE 2 — DETECTION ENGINEERING
+    %% =====================================================
+    subgraph BUILD[" "]
+        direction TB
+
+        BH["🛠️ 2 · DETECTION ENGINEERING"]
 
         E["🔎 Dashboard<br/>+ Hunts"]
         F["🛡️ Detection<br/>v1.0"]
         G["✅ Positive + Benign<br/>Validation"]
         H["🚨 Scheduled<br/>Alert"]
 
-        E --> F --> G --> H
+        BH --> E --> F --> G --> H
     end
 
-    %% ─────────────────────────────
+
+    %% =====================================================
     %% PHASE 3 — SOC READINESS
-    %% ─────────────────────────────
-    subgraph READY["🎯  SOC READINESS"]
-        direction LR
+    %% =====================================================
+    subgraph READY[" "]
+        direction TB
+
+        RH["🎯 3 · SOC READINESS"]
 
         I["🔬 Raw Evidence<br/>Drilldown"]
         J["🤖 AI Evidence<br/>Contract"]
         K["🏁 SOC-Ready"]
 
-        I --> J --> K
+        RH --> I --> J --> K
     end
 
-    D --> E
-    H --> I
 
-    %% ─────────────────────────────
+    %% =====================================================
+    %% PHASE-TO-PHASE FLOW
+    %% Connect containers, not internal nodes.
+    %% This keeps each phase compact and prevents
+    %% arrows from crossing heading text.
+    %% =====================================================
+    DATA --> BUILD
+    BUILD --> READY
+
+
+    %% =====================================================
+    %% HEADER STYLES
+    %% =====================================================
+    classDef dataHeader fill:#083344,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
+    classDef buildHeader fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#ffffff;
+    classDef readyHeader fill:#052e16,stroke:#4ade80,stroke-width:2px,color:#ffffff;
+
+    class DH dataHeader;
+    class BH buildHeader;
+    class RH readyHeader;
+
+
+    %% =====================================================
     %% NODE STYLES
-    %% ─────────────────────────────
+    %% =====================================================
     classDef telemetry fill:#0c4a6e,stroke:#38bdf8,stroke-width:2px,color:#ffffff;
     classDef mapping fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
     classDef timing fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#ffffff;
@@ -121,11 +149,12 @@ flowchart TB
     class J ai;
     class K final;
 
-    %% ─────────────────────────────
-    %% GROUP STYLES
-    %% ─────────────────────────────
+
+    %% =====================================================
+    %% CONTAINER STYLES
+    %% =====================================================
     style DATA fill:#0d1117,stroke:#38bdf8,stroke-width:1px
-    style BUILD fill:#0d1117,stroke:#a78bfa,stroke-width:1px
+    style BUILD fill:#0d1117,stroke:#c084fc,stroke-width:1px
     style READY fill:#0d1117,stroke:#4ade80,stroke-width:1px
 
     linkStyle default stroke:#94a3b8,stroke-width:2px
