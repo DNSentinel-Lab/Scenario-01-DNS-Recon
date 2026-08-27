@@ -320,50 +320,47 @@ Scenario 01 tests whether public-authoritative DNS reconnaissance can be detecte
 ## 🔄 How the Exercise Unfolded
 
 ```mermaid
-%%{init: {"themeVariables": {"fontSize": "22px"}}}%%
+%%{init: {
+  "themeVariables": {
+    "fontSize": "24px"
+  },
+  "flowchart": {
+    "nodeSpacing": 30,
+    "rankSpacing": 40
+  }
+}}%%
 
-flowchart LR
-
-    %% =====================================================
-    %% 1 — DETECTION SETUP
-    %% =====================================================
-    subgraph S1[" "]
-        direction TB
-
-        H1["🛠️ 1 · DETECTION SETUP"]
-
-        DE["🧠 Detection Engineering<br/>Sonia"]
-
-        F["🧊 Detection v1.0<br/>Frozen"]
-
-        H1 --> DE --> F
-    end
-
+flowchart TB
 
     %% =====================================================
-    %% 2 — EXERCISE + TELEMETRY
+    %% ROW 1 — BUILD → EXERCISE → DETECT
     %% =====================================================
-    subgraph S2[" "]
-        direction TB
+    subgraph ROW1[" "]
+        direction LR
 
-        H2["🎭 2 · EXERCISE + TELEMETRY"]
+        DE["🧠 1 · Detection Engineering<br/>Sonia"]
+
+        F["🧊 2 · Detection v1.0<br/>Frozen"]
 
         subgraph CASES[" "]
-            direction LR
+            direction TB
 
-            C1["✅ CASE 01<br/>Authorized DNS<br/>Validation"]
+            C1["✅ 3A · Authorized DNS<br/>Validation"]
 
-            C2["🚨 CASE 02<br/>External DNS<br/>Recon"]
+            C2["🚨 3B · External DNS<br/>Recon"]
         end
 
-        R53["🌍 Route 53<br/>Authoritative Telemetry"]
+        R53["🌍 4 · Route 53<br/>Telemetry"]
 
-        SPL["🟢 Splunk<br/>Detection + Dashboard"]
+        SPL["🟢 5 · Splunk Detection<br/>+ Dashboard"]
 
-        AI["🤖 AI-Assisted<br/>Triage"]
+        AI["🤖 6 · AI-Assisted<br/>Triage"]
 
-        H2 --> C1
-        H2 --> C2
+
+        DE --> F
+
+        F --> C1
+        F --> C2
 
         C1 --> R53
         C2 --> R53
@@ -373,69 +370,61 @@ flowchart LR
 
 
     %% =====================================================
-    %% 3 — HUMAN DECISION + OUTCOME
+    %% ROW 2 — HUMAN ANALYSIS → OUTCOME
     %% =====================================================
-    subgraph S3[" "]
-        direction TB
+    subgraph ROW2[" "]
+        direction LR
 
-        H3["⚖️ 3 · HUMAN DECISION + OUTCOME"]
+        SOC["🔎 7 · SOC Analyst<br/>Musfira"]
 
-        SOC["🔎 SOC Analyst<br/>Musfira"]
+        DEC{"⚖️ 8 · Human<br/>Decision"}
 
-        DEC{"⚖️ Evidence-Backed<br/>Decision"}
+        CLOSE["✅ 9A · Authorized TP<br/>SOC Closure"]
 
-        subgraph OUTCOME[" "]
-            direction LR
+        IR["🛡️ 9B · IR<br/>Lubaba"]
 
-            CLOSE["✅ CASE 01 OUTCOME<br/>Authorized TP<br/>SOC Closure"]
+        REVIEW["🔗 Evidence Review<br/>DNS · Nginx · VPC"]
 
-            INCIDENT["🛡️ CASE 02 OUTCOME<br/>IR · Lubaba<br/>DNS + Nginx + VPC Review<br/>Preserve + Monitor"]
-        end
+        MON["📋 Preserve + Monitor<br/>No Active Containment"]
 
-        H3 --> SOC --> DEC
+
+        SOC --> DEC
 
         DEC --> CLOSE
-        DEC --> INCIDENT
+
+        DEC --> IR
+        IR --> REVIEW
+        REVIEW --> MON
     end
 
 
     %% =====================================================
-    %% MAIN HORIZONTAL FLOW
+    %% ROW-TO-ROW FLOW
+    %% Group-level connection preserves horizontal rows
     %% =====================================================
-    F --> H2
-    AI --> H3
-
-
-    %% =====================================================
-    %% HEADER STYLES
-    %% =====================================================
-    classDef h1 fill:#172554,stroke:#60a5fa,stroke-width:3px,color:#ffffff,font-size:23px,font-weight:bold;
-    classDef h2 fill:#422006,stroke:#fbbf24,stroke-width:3px,color:#ffffff,font-size:23px,font-weight:bold;
-    classDef h3 fill:#312e81,stroke:#c084fc,stroke-width:3px,color:#ffffff,font-size:23px,font-weight:bold;
-
-    class H1 h1;
-    class H2 h2;
-    class H3 h3;
+    ROW1 --> ROW2
 
 
     %% =====================================================
-    %% NODE STYLES
+    %% NODE STYLES — LARGE READABLE TEXT
     %% =====================================================
-    classDef engineering fill:#172554,stroke:#60a5fa,stroke-width:2px,color:#ffffff,font-size:22px;
-    classDef frozen fill:#1f2937,stroke:#94a3b8,stroke-width:2px,color:#ffffff,font-size:22px;
+    classDef engineering fill:#172554,stroke:#60a5fa,stroke-width:3px,color:#ffffff,font-size:24px;
+    classDef frozen fill:#1f2937,stroke:#94a3b8,stroke-width:3px,color:#ffffff,font-size:24px;
 
-    classDef authorized fill:#052e16,stroke:#4ade80,stroke-width:2px,color:#ffffff,font-size:22px;
-    classDef attack fill:#450a0a,stroke:#f87171,stroke-width:2px,color:#ffffff,font-size:22px;
+    classDef authorized fill:#052e16,stroke:#4ade80,stroke-width:3px,color:#ffffff,font-size:24px;
+    classDef attack fill:#450a0a,stroke:#f87171,stroke-width:3px,color:#ffffff,font-size:24px;
 
-    classDef dns fill:#083344,stroke:#22d3ee,stroke-width:2px,color:#ffffff,font-size:22px;
-    classDef splunk fill:#052e16,stroke:#4ade80,stroke-width:3px,color:#ffffff,font-size:22px;
-    classDef ai fill:#581c87,stroke:#e879f9,stroke-width:2px,color:#ffffff,font-size:22px;
+    classDef dns fill:#083344,stroke:#22d3ee,stroke-width:3px,color:#ffffff,font-size:24px;
+    classDef splunk fill:#052e16,stroke:#4ade80,stroke-width:4px,color:#ffffff,font-size:24px;
+    classDef ai fill:#581c87,stroke:#e879f9,stroke-width:3px,color:#ffffff,font-size:24px;
 
-    classDef soc fill:#164e63,stroke:#38bdf8,stroke-width:3px,color:#ffffff,font-size:22px;
-    classDef decision fill:#1f2937,stroke:#f8fafc,stroke-width:3px,color:#ffffff,font-size:22px;
+    classDef soc fill:#164e63,stroke:#38bdf8,stroke-width:3px,color:#ffffff,font-size:24px;
+    classDef decision fill:#312e81,stroke:#f8fafc,stroke-width:3px,color:#ffffff,font-size:24px;
 
-    classDef closure fill:#14532d,stroke:#22c55e,stroke-width:3px,color:#ffffff,font-size:22px;
-    classDef incident fill:#450a0a,stroke:#fb7185,stroke-width:3px,color:#ffffff,font-size:22px;
+    classDef closure fill:#14532d,stroke:#22c55e,stroke-width:3px,color:#ffffff,font-size:24px;
+    classDef ir fill:#7f1d1d,stroke:#fb7185,stroke-width:3px,color:#ffffff,font-size:24px;
+    classDef review fill:#172033,stroke:#38bdf8,stroke-width:3px,color:#ffffff,font-size:24px;
+    classDef monitor fill:#422006,stroke:#fbbf24,stroke-width:3px,color:#ffffff,font-size:24px;
 
 
     %% =====================================================
@@ -455,22 +444,22 @@ flowchart LR
     class DEC decision;
 
     class CLOSE closure;
-    class INCIDENT incident;
+    class IR ir;
+    class REVIEW review;
+    class MON monitor;
 
 
     %% =====================================================
     %% CONTAINER STYLES
     %% =====================================================
-    style S1 fill:#0d1117,stroke:#60a5fa,stroke-width:1px
-    style S2 fill:#0d1117,stroke:#fbbf24,stroke-width:1px
-    style S3 fill:#0d1117,stroke:#c084fc,stroke-width:1px
+    style ROW1 fill:#0d1117,stroke:#30363d,stroke-width:1px
+    style ROW2 fill:#0d1117,stroke:#30363d,stroke-width:1px
 
-    style CASES fill:#111827,stroke:#30363d,stroke-width:1px
-    style OUTCOME fill:#111827,stroke:#30363d,stroke-width:1px
+    style CASES fill:#111827,stroke:#fbbf24,stroke-width:1px
 
 
     %% =====================================================
-    %% EDGE STYLE
+    %% ARROWS
     %% =====================================================
     linkStyle default stroke:#b6c2d1,stroke-width:3px
 ```
