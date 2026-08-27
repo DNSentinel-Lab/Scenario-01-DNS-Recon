@@ -29,9 +29,50 @@ The external attack path used a Kali EC2 instance in a **different AWS account a
 
 ```mermaid
 flowchart LR
-    K["External Kali<br/>separate AWS account"] -->|Internet DNS| R["Route 53 public hosted zone"]
-    R -->|authoritative query logs| S[Defender Splunk]
-    K -. no private route / no shared asset inventory .-> S
+
+    %% =====================================================
+    %% MAIN PATH
+    %% =====================================================
+    K["⚔️ External Kali<br/>Separate AWS Account"]
+
+    R["🌐 Route 53<br/>Public Hosted Zone"]
+
+    S["🟢 Defender Splunk<br/>Authoritative DNS Evidence"]
+
+    K -->|"🌍 Internet DNS"| R
+    R -->|"📡 Authoritative Query Logs"| S
+
+
+    %% =====================================================
+    %% TRUST BOUNDARY
+    %% =====================================================
+    N["🚫 No Private Route<br/>No Shared Asset Inventory"]
+
+    K -.-> N
+    N -.-> S
+
+
+    %% =====================================================
+    %% NODE STYLES
+    %% =====================================================
+    classDef attacker fill:#450a0a,stroke:#f87171,stroke-width:3px,color:#ffffff;
+    classDef dns fill:#172554,stroke:#60a5fa,stroke-width:3px,color:#ffffff;
+    classDef splunk fill:#052e16,stroke:#4ade80,stroke-width:3px,color:#ffffff;
+    classDef blocked fill:#2a1111,stroke:#fb7185,stroke-width:2px,color:#ffffff;
+
+    class K attacker;
+    class R dns;
+    class S splunk;
+    class N blocked;
+
+
+    %% =====================================================
+    %% EDGE STYLES
+    %% =====================================================
+    linkStyle 0 stroke:#60a5fa,stroke-width:3px
+    linkStyle 1 stroke:#4ade80,stroke-width:3px
+    linkStyle 2 stroke:#f87171,stroke-width:2px,stroke-dasharray:6 5
+    linkStyle 3 stroke:#f87171,stroke-width:2px,stroke-dasharray:6 5
 ```
 
 ## 2. Ground-truth discipline
